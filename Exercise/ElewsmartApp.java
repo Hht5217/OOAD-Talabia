@@ -1,3 +1,10 @@
+// Exercise 2 OOAD
+// TAN HONG HAN 1211105217
+// LIM KIAN ZEE 1211200291
+// CHAI DI SHENG 1211101961
+// LAM ZI FOONG 1221303175
+// TAN YI KAI 1211201274
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,7 +26,7 @@ public class ElewsmartApp extends JFrame {
     public ElewsmartApp() {
         super("Elewsmart App");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        setPreferredSize(new Dimension(500,500));
 
         // Initialize components
         listModel = new DefaultListModel<>();
@@ -43,7 +50,7 @@ public class ElewsmartApp extends JFrame {
 
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setLayout(new GridLayout(4, 1));
 
         JButton addToCartButton = new JButton("Add to Cart");
         addToCartButton.addActionListener(new AddToCartListener());
@@ -69,21 +76,28 @@ public class ElewsmartApp extends JFrame {
         JPanel leftPanel = new JPanel(new FlowLayout());
         String list[] = { "Item 1 (RM5.00)", "Item 2 (RM10.00)", "Item 3 (RM7.50)", "Item 4 (RM3.25)" };
         itemList = new JList<>(list);
-        leftPanel.add(itemList, BorderLayout.WEST);
+        leftPanel.add(itemList);
+        leftPanel.setBackground(Color.WHITE);
+        leftPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         return leftPanel;
     }
 
     private JPanel createMiddlePanel() {
-        JPanel midPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        midPanel.setLayout(new BoxLayout(midPanel, BoxLayout.Y_AXIS));
+        JPanel midPanel = new JPanel();
+        midPanel.setLayout(new BorderLayout());
+    
+        JPanel northLabel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel text = new JLabel("Shopping Cart");
-        midPanel.add(text, BorderLayout.NORTH);
-
-        midPanel.add(cartTextArea, BorderLayout.CENTER);
-        cartTextArea.setBounds(0,0, 50,50); 
-        
+        northLabel.add(text);
+        midPanel.add(northLabel, BorderLayout.NORTH);
+    
+        midPanel.add(new JScrollPane(cartTextArea), BorderLayout.CENTER);
+    
+        JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         totalLabel = new JLabel("Total: RM0.00");
-        midPanel.add(totalLabel, BorderLayout.SOUTH);
+        southPanel.add(totalLabel);
+        midPanel.add(southPanel, BorderLayout.SOUTH);
+
         return midPanel;
     }
 
@@ -137,7 +151,7 @@ public class ElewsmartApp extends JFrame {
         public void actionPerformed(ActionEvent e) {
             cartTextArea.setText("");
             totalLabel.setText("Total: RM0.00");
-            totalPrice =0;
+            totalPrice = 0;
         }
     }
 
