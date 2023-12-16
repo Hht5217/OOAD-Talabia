@@ -1,6 +1,5 @@
-public class Main{
-    public static void main(string[] args){
-        Game game = new Game();
-        game.gameLoop();
+public class Main {
+    public static void main(String[] args) {
+        new View();
     }
 }
