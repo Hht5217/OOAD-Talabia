@@ -48,6 +48,15 @@ public class Piece {
 
     }
 
+    // Check can the piece move to another spot
+    protected boolean availableMove(int xPos, int yPos) {
+        if (pieces.inBoard(xPos, yPos)) {
+            Piece location = pieces.pieceLocation(xPos, yPos);
+            return location == null;
+        }
+        return false;
+    }
+
     // Get X position of piece
     public int getXPos() {
         return xPos;
