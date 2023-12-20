@@ -20,6 +20,19 @@ public class Board {
         pieces[addX][addY] = pieceToAdd;
     }
 
+    // Check if the piece is within the board
+    public boolean inBoard(int xPos, int yPos){
+		return xPos >= 0 && xPos < getX() && yPos >= 0 && yPos < getY();
+	}
+
+    // Check status of specific location on board
+    public Piece pieceLocation(int xPos, int yPos){
+		if (inBoard(xPos, yPos)){
+			return pieces[xPos][yPos];
+		}
+		return null;
+	}
+
     public int getX() {
         return pieces[0].length;
     }
