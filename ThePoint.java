@@ -3,8 +3,8 @@ public class ThePoint extends Piece {
     // super(pieceName, color);
     // }
 
-    public ThePoint(String pieceName, int xPos, int yPos, int color) {
-        super(pieceName, xPos, yPos, color);
+    public ThePoint(String pieceName, int xPos, int yPos, int color, Board pieceBoard) {
+        super(pieceName, xPos, yPos, color, pieceBoard);
     }
 
     public boolean availableMove() {

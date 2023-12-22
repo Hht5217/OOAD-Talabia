@@ -1,6 +1,6 @@
 public class HourGlass extends Piece {
-    public hourGlass(Board board) {
-        super(board);
+    public HourGlass(String pieceName, int xPos, int yPos, int color, Board pieceBoard) {
+        super(pieceName, xPos, yPos, color, pieceBoard);
     }
 
     public boolean Movement(int xPos, int yPos) {

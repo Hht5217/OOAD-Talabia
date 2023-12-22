@@ -11,9 +11,10 @@ public class Piece {
     private final int YELLOW = 1;
     private final int BLUE = 2;
     private int color;
+    private Board pieceBoard;
     // private boolean moving;
 
-    public Piece(String pieceName, int xPos, int yPos, int color) {
+    public Piece(String pieceName, int xPos, int yPos, int color, Board pieceBoard) {
         this.pieceName = pieceName;
         this.xPos = xPos;
         this.yPos = yPos;
@@ -22,6 +23,7 @@ public class Piece {
         } else {
             this.color = BLUE;
         }
+        this.pieceBoard = pieceBoard;
     }
 
     // public Piece(String pieceName, int color) {
@@ -50,8 +52,8 @@ public class Piece {
 
     // Check can the piece move to another spot
     protected boolean availableMove(int xPos, int yPos) {
-        if (pieces.inBoard(xPos, yPos)) {
-            Piece location = pieces.pieceLocation(xPos, yPos);
+        if (pieceBoard.inBoard(xPos, yPos)) {
+            Piece location = pieceBoard.pieceLocation(xPos, yPos);
             return location == null;
         }
         return false;
