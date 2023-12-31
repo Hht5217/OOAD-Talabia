@@ -1,11 +1,9 @@
-package src;
-
-import src.controller.Controller;
-import src.model.Game;
-import src.view.View;
+import model.*;
+import view.*;
+import controller.*;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Game g = new Game(); // One of model
         // Model m = new Model();
         View v = new View(g); // View display the model in GUI

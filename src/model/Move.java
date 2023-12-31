@@ -1,4 +1,4 @@
-package src.model;
+package model;
 
 // For moving pieces and check positions purpose
 public class Move {

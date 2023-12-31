@@ -1,9 +1,9 @@
-package src.controller;
+package controller;
 
-import src.model.*;
-import src.view.*;
+import model.*;
+import view.*;
 
-import java.awt.*;
+//import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 

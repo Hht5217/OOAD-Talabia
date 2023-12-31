@@ -1,5 +1,6 @@
-package src.model;
+package model;
+
 public enum Color {
-    BLUE,
+	BLUE,
     YELLOW
 }

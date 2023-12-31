@@ -1,7 +1,7 @@
-package src.model;
+package model;
 
 public class Board {
-    private Piece[][] pieces;
+	private Piece[][] pieces;
 
     public Board() {
         this.pieces = new Piece[6][7];

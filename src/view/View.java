@@ -1,14 +1,9 @@
-package src.view;
+package view;
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
-import javax.swing.text.Position;
 
-import src.model.Board;
-import src.model.Game;
-import src.model.Move;
-import src.model.Piece;
+import model.*;
 
 public class View {
     private Game game;
@@ -20,7 +15,6 @@ public class View {
         JFrame talabiaFrame = new JFrame("Talabia");
         talabiaFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         talabiaFrame.setSize(700, 600);
-
         JPanel boardPanel = new JPanel();
         boardPanel.setLayout(new GridLayout(6, 7));
 
@@ -40,7 +34,7 @@ public class View {
             }
         }
 
-        addPieceImage(game);
+        addPieceImage(this.game);
         talabiaFrame.add(boardPanel);
         talabiaFrame.setLocationRelativeTo(null);
         // talabiaFrame.pack();
