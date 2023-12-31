@@ -1,7 +1,14 @@
+package src.view;
+
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.text.Position;
+
+import src.model.Board;
+import src.model.Game;
+import src.model.Move;
+import src.model.Piece;
 
 public class View {
     private Game game;

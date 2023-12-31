@@ -1,3 +1,5 @@
+package src.model;
+
 import java.util.List;
 
 public class Plus extends Piece {

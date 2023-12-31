@@ -1,6 +1,11 @@
-import javax.swing.*;
+package src.controller;
+
+import src.model.*;
+import src.view.*;
+
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
 
 public class Controller {
     private Game talabiaGame;

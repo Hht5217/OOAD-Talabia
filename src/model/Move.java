@@ -1,3 +1,5 @@
+package src.model;
+
 // For moving pieces and check positions purpose
 public class Move {
     private int row;

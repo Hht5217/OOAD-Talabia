@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+package src.model;
+
 import java.util.List;
 
 public class ThePoint extends Piece {

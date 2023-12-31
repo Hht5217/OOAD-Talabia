@@ -1,6 +1,5 @@
+package src.model;
 
-// import javax.imageio.ImageIO;
-// import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ public abstract class Piece {
 
     // Get the image of the chess piece with given name
     public ImageIcon getPieceImage(int buttonWidth, int buttonHeight) {
-        String imageName = "images/" + toString() + ".png";
+        String imageName = "src/resources/images/" + toString() + ".png";
         URL imageUrl = getClass().getClassLoader().getResource(imageName);
 
         if (imageUrl != null) {

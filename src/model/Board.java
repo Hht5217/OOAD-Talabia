@@ -1,6 +1,5 @@
-import java.util.*;
+package src.model;
 
-// Model class
 public class Board {
     private Piece[][] pieces;
 
