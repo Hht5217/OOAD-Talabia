@@ -1,35 +1,28 @@
-import javax.imageio.ImageIO;
-import java.io.*;
+
+// import javax.imageio.ImageIO;
+// import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.*;
 import javax.swing.*;
 
-public class Piece {
+public abstract class Piece {
     private String pieceName;
     private int xPos;
     private int yPos;
-    private final int YELLOW = 1;
-    private final int BLUE = 2;
-    private int color;
+    private Color color;
     private Board pieceBoard;
-    // private boolean moving;
+    private boolean selected = false;
+    protected List<Move> movePos = new ArrayList<>();
 
-    public Piece(String pieceName, int xPos, int yPos, int color, Board pieceBoard) {
+    public Piece(String pieceName, int yPos, int xPos, Color color, Board pieceBoard) {
         this.pieceName = pieceName;
-        this.xPos = xPos;
         this.yPos = yPos;
-        if (color == 1) {
-            this.color = YELLOW;
-        } else {
-            this.color = BLUE;
-        }
+        this.xPos = xPos;
+        this.color = color;
         this.pieceBoard = pieceBoard;
     }
-
-    // public Piece(String pieceName, int color) {
-    // this.pieceName = pieceName;
-    // this.color = color;
-    // }
 
     // Get the image of the chess piece with given name
     public ImageIcon getPieceImage(int buttonWidth, int buttonHeight) {
@@ -46,17 +39,9 @@ public class Piece {
         }
     }
 
-    public void movePos(int moveX, int moveY) {
-
-    }
-
-    // Check can the piece move to another spot
-    protected boolean availableMove(int xPos, int yPos) {
-        if (pieceBoard.inBoard(xPos, yPos)) {
-            Piece location = pieceBoard.pieceLocation(xPos, yPos);
-            return location == null;
-        }
-        return false;
+    // Get y position of piece
+    public int getYPos() {
+        return yPos;
     }
 
     // Get X position of piece
@@ -64,18 +49,32 @@ public class Piece {
         return xPos;
     }
 
-    // Get y position of piece
-    public int getYPos() {
-        return yPos;
+    // Set location of piece
+    public void setPos(int newYPos, int newXPos) {
+        this.yPos = newYPos;
+        this.xPos = newXPos;
     }
 
     // Get color of piece
-    public int getColor() {
+    public Color getColor() {
         return color;
+    }
+
+    // Check if piece selected
+    public boolean getSelected() {
+        return selected;
+    }
+
+    // Set state of select
+    public void setSelected(boolean select) {
+        this.selected = select;
     }
 
     // Get chess piece name
     public String toString() {
         return pieceName;
     }
+
+    // abstract method since every sub-pieces will have different calculations
+    public abstract List<Move> getAvailableMoves();
 }

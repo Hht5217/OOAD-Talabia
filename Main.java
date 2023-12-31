@@ -1,5 +1,4 @@
 public class Main {
-    //commit changes
     public static void main(String[] args) {
         Game g = new Game(); // One of model
         // Model m = new Model();
