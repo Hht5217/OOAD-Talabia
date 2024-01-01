@@ -1,6 +1,8 @@
+
+
+import controller.Controller;
 import model.*;
 import view.*;
-import controller.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
