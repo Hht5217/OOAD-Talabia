@@ -51,7 +51,11 @@ public class Controller {
                 selectPiece(selectedButton, selectedPiece);
             }
         } else if (lastSelectPiece != null && isMoveButton(selectedButton, lastSelectPiece)) {
-            System.out.println("Moved");
+            talabiaView.hideAvailableMoves(lastSelectPiece);
+            moveSelected(lastSelectButton, selectedButton, lastSelectPiece);
+            deselectPiece(lastSelectButton, lastSelectPiece);
+            System.out.println("Moved\n*******************************"); // test
+            talabiaBoard.printBoard();
         }
     }
 
@@ -71,6 +75,13 @@ public class Controller {
         talabiaView.hideAvailableMoves(piece);
         lastSelectPiece = null;
         lastSelectButton = null;
+    }
+
+    // Move after piece's available move is clicked
+    private void moveSelected(JButton oriButton, JButton movingButton, Piece movingPiece) {
+        talabiaView.moveButton(oriButton, movingButton);
+        Move movePos = talabiaView.getButtonPosition(movingButton);
+        talabiaBoard.movePiece(movingPiece, movePos);
     }
 
     // Check if the button is a move button

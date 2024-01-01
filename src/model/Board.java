@@ -1,7 +1,7 @@
 package model;
 
 public class Board {
-	private Piece[][] pieces;
+    private Piece[][] pieces;
 
     public Board() {
         this.pieces = new Piece[6][7];
@@ -23,12 +23,15 @@ public class Board {
     }
 
     // Move piece to new position
-    public void movePiece(Piece p, int y, int x) {
+    public void movePiece(Piece piece, Move movePos) {
         // Get old position of piece
-        int oldYPos = p.getYPos();
-        int oldXPos = p.getXPos();
-        pieces[y][x] = p; // Place the piece at the new position
-        p.setPos(y, x); // Update the value of y and x of piece
+        int oldYPos = piece.getYPos();
+        int oldXPos = piece.getXPos();
+        int newYPos = movePos.getMoveRow();
+        int newXPos = movePos.getMoveColumn();
+
+        pieces[newYPos][newXPos] = piece; // Place the piece at the new position
+        piece.setPos(newYPos, newXPos); // Update the value of y and x of piece
         pieces[oldYPos][oldXPos] = null; // Remove piece from old position
     }
 

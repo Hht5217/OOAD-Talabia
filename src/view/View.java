@@ -41,6 +41,7 @@ public class View {
         talabiaFrame.setVisible(true);
     }
 
+    // Add images to buttons after getting the image from pieces
     public void addPieceImage(Game game) {
         Board talabiaChessBoard = game.getTalabiaChessBoard();
         for (int r = 0; r < 6; r++) {
@@ -81,6 +82,13 @@ public class View {
             // System.out.println("Move:" + moves.toString()); // test
             chessButtons[moves.getMoveRow()][moves.getMoveColumn()].setBackground(java.awt.Color.WHITE);
         }
+    }
+
+    // Move images from one button to another
+    public void moveButton(JButton oriButton, JButton movingButton) {
+        Icon icon = oriButton.getIcon();
+        movingButton.setIcon(icon);
+        oriButton.setIcon(null);
     }
 
     // Get chess buttons array

@@ -14,17 +14,17 @@ public class ThePoint extends Piece {
         if (!movePos.isEmpty()) {
             movePos.clear();
         }
-        int moveY = getYPos();
-        int moveX = getXPos();
+        int initialY = getYPos();
+        int initialX = getXPos();
 
-        if (getColor() == Color.YELLOW) {
-            Move move1 = new Move(moveY - 1, moveX);
-            Move move2 = new Move(moveY - 2, moveX);
+        if (this.getColor() == Color.YELLOW) {
+            Move move1 = new Move(initialY - 1, initialX);
+            Move move2 = new Move(initialY - 2, initialX);
             movePos.add(move1);
             movePos.add(move2);
-        } else if (getColor() == Color.BLUE) {
-            Move move1 = new Move(moveY + 1, moveX);
-            Move move2 = new Move(moveY + 2, moveX);
+        } else if (this.getColor() == Color.BLUE) {
+            Move move1 = new Move(initialY + 1, initialX);
+            Move move2 = new Move(initialY + 2, initialX);
             movePos.add(move1);
             movePos.add(move2);
         }
