@@ -8,6 +8,7 @@
 7. Check if board need to have color (no need)
 8. move chess pieces and capture other pieces
 9. determine game logic and pieces movement
+10. for chess piece movement make sure chess piece will detect piece color, do nothing / no movement if same color and capture if different
 
 also check if project is runnable on other machines
 **~** means if possible, not prioritised
