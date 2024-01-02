@@ -7,12 +7,12 @@ import java.awt.*;
 import javax.swing.*;
 
 public abstract class Piece {
-    private String pieceName;
-    private int xPos;
-    private int yPos;
-    private Color color;
-    private Board pieceBoard;
-    private boolean selected = false;
+    protected String pieceName;
+    protected int xPos;
+    protected int yPos;
+    protected Color color;
+    protected Board pieceBoard;
+    protected boolean selected = false;
     protected List<Move> movePos = new ArrayList<>();
 
     public Piece(String pieceName, int yPos, int xPos, Color color, Board pieceBoard) {
@@ -23,7 +23,7 @@ public abstract class Piece {
         this.pieceBoard = pieceBoard;
     }
 
-    // Get the image of the chess piece with given name
+    // Get the image of the chess piece with given name (can move to View class)
     public ImageIcon getPieceImage(int buttonWidth, int buttonHeight) {
         String imageName = toString() + ".png";
         URL imageUrl = getClass().getClassLoader().getResource(imageName);
