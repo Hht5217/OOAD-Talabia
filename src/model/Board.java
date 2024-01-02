@@ -68,17 +68,18 @@ public class Board {
         return pieces;
     }
 
-    // Test purpose
+    // Test purpose, might use to save game later
     public void printBoard() {
         for (int i = 0; i < pieces.length; i++) {
             for (int j = 0; j < pieces[i].length; j++) {
                 if (isEmptySpace(i, j)) {
-                    System.out.print("null |");
+                    System.out.print(String.format("%10s", "null"));
                 } else {
-                    System.out.print(pieces[i][j].toString() + "|");
+                    System.out.print(String.format("%10s", pieces[i][j].toString()));
                 }
+                System.out.print("|");
             }
-            System.out.println("");
+            System.out.println("\n" + "-".repeat(80));
         }
     }
 }
