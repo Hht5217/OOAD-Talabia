@@ -11,7 +11,6 @@ public class Sun extends Piece {
     @Override
     // public void availableMoves() {
     public List<Move> getAvailableMoves() {
-        // move logic
         movePos.clear();
         int currentY = getYPos();
         int currentX = getXPos();
@@ -20,11 +19,21 @@ public class Sun extends Piece {
         // occupied spaces
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
+                // Skip the iteration where i and j are both 0, as this is the current position
+                if (i == 0 && j == 0) {
+                    continue;
+                }
+
                 int potentialY = currentY + i;
                 int potentialX = currentX + j;
 
-                if (pieceBoard.inBoard(potentialY, potentialX) && pieceBoard.isEmptySpace(potentialY, potentialX)) {
-                    movePos.add(new Move(potentialY, potentialX));
+                // Check if the potential move is within the board
+                if (pieceBoard.inBoard(potentialY, potentialX)) {
+                    // Check if the space is empty or occupied by an opponent's piece
+                    if (pieceBoard.isEmptySpace(potentialY, potentialX) ||
+                            !pieceBoard.getPiece(potentialY, potentialX).getColor().equals(this.getColor())) {
+                        movePos.add(new Move(potentialY, potentialX));
+                    }
                 }
             }
         }
