@@ -25,6 +25,7 @@ public class HourGlass extends Piece {
     // public void availableMoves() {
     public List<Move> getAvailableMoves() {
         // move logic
+        // y - or + 2, x - or + 1
         return movePos;
     }
 }

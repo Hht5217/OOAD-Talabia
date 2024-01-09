@@ -33,6 +33,10 @@ public class Board {
         pieces[newYPos][newXPos] = piece; // Place the piece at the new position
         piece.setPos(newYPos, newXPos); // Update the value of y and x of piece
         pieces[oldYPos][oldXPos] = null; // Remove piece from old position
+
+        if (piece instanceof ThePoint) {
+            ((ThePoint) piece).updateDirection();
+        }
     }
 
     // Check if the piece is within the board

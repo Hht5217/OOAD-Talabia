@@ -32,7 +32,7 @@ public class Game {
     // number of piece
     public void addYPoint() {
         for (int i = 0; i < 7; i++) {
-            Piece points = new ThePoint("yPoint", 4, i, Color.YELLOW, talabiaChessBoard);
+            Piece points = new ThePoint("yPoint", 4, i, Color.YELLOW, "NORTH", talabiaChessBoard);
             talabiaChessBoard.addPiece(points);
             player2Pieces.add(points);
         }
@@ -40,7 +40,7 @@ public class Game {
 
     public void addBPoint() {
         for (int i = 0; i < 7; i++) {
-            Piece points = new ThePoint("bPoint", 1, i, Color.BLUE, talabiaChessBoard);
+            Piece points = new ThePoint("bPoint", 1, i, Color.BLUE, "SOUTH", talabiaChessBoard);
             talabiaChessBoard.addPiece(points);
             player1Pieces.add(points);
         }
