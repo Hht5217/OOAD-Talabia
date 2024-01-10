@@ -22,35 +22,47 @@ public class Board {
         pieces[addY][addX] = pieceToAdd;
     }
 
-    // Move piece to new position
-    public void movePiece(Piece piece, Move movePos) {
-        // Get old position of piece
+    // Update chess pieces on board, this is different than add piece method
+    public void setPiece(Piece piece, Move move) {
         int oldYPos = piece.getYPos();
         int oldXPos = piece.getXPos();
-        int newYPos = movePos.getMoveRow();
-        int newXPos = movePos.getMoveColumn();
+        int newYPos = move.getMoveRow();
+        int newXPos = move.getMoveColumn();
 
         pieces[newYPos][newXPos] = piece; // Place the piece at the new position
         piece.setPos(newYPos, newXPos); // Update the value of y and x of piece
         pieces[oldYPos][oldXPos] = null; // Remove piece from old position
-
-        if (piece instanceof ThePoint) {
-            ((ThePoint) piece).updateDirection();
-        }
     }
+
+    // // Move piece to new position
+    // public void movePiece(Piece piece, Move movePos) {
+    // // Get old position of piece
+    // int oldYPos = piece.getYPos();
+    // int oldXPos = piece.getXPos();
+    // int newYPos = movePos.getMoveRow();
+    // int newXPos = movePos.getMoveColumn();
+
+    // pieces[newYPos][newXPos] = piece; // Place the piece at the new position
+    // piece.setPos(newYPos, newXPos); // Update the value of y and x of piece
+    // pieces[oldYPos][oldXPos] = null; // Remove piece from old position
+
+    // if (piece instanceof ThePoint) {
+    // ((ThePoint) piece).updateDirection();
+    // }
+    // }
 
     // Check if the piece is within the board
     public boolean inBoard(int yPos, int xPos) {
         return xPos >= 0 && xPos < getX() && yPos >= 0 && yPos < getY();
     }
 
-    // Check status of specific location on board
-    public Piece pieceLocation(int yPos, int xPos) {
-        if (inBoard(yPos, xPos)) {
-            return getPiece(yPos, xPos);
-        }
-        return null;
-    }
+    // // Check status of specific location on board (currently not in use)
+    // public Piece pieceLocation(int yPos, int xPos) {
+    // if (inBoard(yPos, xPos)) {
+    // return getPiece(yPos, xPos);
+    // }
+    // return null;
+    // }
 
     // Get length X (row) of board
     public int getX() {
@@ -77,13 +89,13 @@ public class Board {
         for (int i = 0; i < pieces.length; i++) {
             for (int j = 0; j < pieces[i].length; j++) {
                 if (isEmptySpace(i, j)) {
-                    System.out.print(String.format("%10s", "null"));
+                    System.out.print(String.format("%12s", "null"));
                 } else {
-                    System.out.print(String.format("%10s", pieces[i][j].toString()));
+                    System.out.print(String.format("%12s", pieces[i][j].toString()));
                 }
                 System.out.print("|");
             }
-            System.out.println("\n" + "-".repeat(80));
+            System.out.println("\n" + "-".repeat(91));
         }
     }
 }

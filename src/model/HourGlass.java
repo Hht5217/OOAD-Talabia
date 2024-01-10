@@ -7,25 +7,38 @@ public class HourGlass extends Piece {
         super(pieceName, yPos, xPos, color, pieceBoard);
     }
 
-    // public boolean Movement(int yPos, int xPos) {
-    // if (availableMove(yPos, xPos)) {
-    // return hourGlassMovement(yPos, xPos);
-    // }
-    // return false;
-    // }
-
-    // private boolean hourGlassMovement(int yPos, int xPos) {
-    // int deltaY = Math.abs(this.getYPos() - yPos);
-    // int deltaX = Math.abs(this.getXPos() - xPos);
-    // return (deltaX == 2 && deltaY == 1) || (deltaX == 1 && deltaY == 2);
-    // }
-
-    // Check if piece is allowed to move, add if allowed and do nothing if null
+    // Check if piece is allowed to move, add if allowed and do nothing if not
+    // available move
     @Override
     // public void availableMoves() {
     public List<Move> getAvailableMoves() {
-        // move logic
-        // y - or + 2, x - or + 1
+        movePos.clear();
+        int currentY = getYPos();
+        int currentX = getXPos();
+
+        // Define all possible L-shaped moves for the Hourglass piece
+        int[][] offsets = {
+                { -2, -1 }, { -2, 1 },
+                { -1, -2 }, { -1, 2 },
+                { 1, -2 }, { 1, 2 },
+                { 2, -1 }, { 2, 1 }
+        };
+
+        for (int[] offset : offsets) {
+            int potentialY = currentY + offset[0];
+            int potentialX = currentX + offset[1];
+
+            // Check if the move is within the bounds of the board
+            if (pieceBoard.inBoard(potentialY, potentialX)) {
+                // Check if the square is either empty or contains an opponent's piece
+                if (pieceBoard.isEmptySpace(potentialY, potentialX) ||
+                        !pieceBoard.getPiece(potentialY, potentialX).getColor().equals(this.getColor())) {
+                    movePos.add(new Move(potentialY, potentialX));
+                }
+            }
+        }
+
         return movePos;
     }
+
 }

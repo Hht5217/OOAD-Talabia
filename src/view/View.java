@@ -43,7 +43,7 @@ public class View {
 
     // Add images to buttons after getting the image from pieces
     public void addPieceImage(Game game) {
-        Board talabiaChessBoard = game.getTalabiaChessBoard();
+        Board talabiaChessBoard = game.getGameBoard();
         for (int r = 0; r < 6; r++) {
             for (int c = 0; c < 7; c++) {
                 Piece piece = talabiaChessBoard.getPiece(r, c);

@@ -10,7 +10,8 @@ public class ThePoint extends Piece {
         this.moveDirection = moveDirection;
     }
 
-    // Check if piece is allowed to move, add if allowed and do nothing if null
+    // Check if piece is allowed to move, add if allowed and do nothing if not
+    // available moves
     @Override
     public List<Move> getAvailableMoves() {
         movePos.clear(); // Clear the list of moves

@@ -17,7 +17,7 @@ public class Controller {
     public Controller(Game tGame, View tView) {
         this.talabiaGame = tGame;
         this.talabiaView = tView;
-        this.talabiaBoard = tGame.getTalabiaChessBoard();
+        this.talabiaBoard = tGame.getGameBoard();
     }
 
     // Initialize controller
@@ -81,7 +81,10 @@ public class Controller {
     private void moveSelected(JButton oriButton, JButton movingButton, Piece movingPiece) {
         talabiaView.moveButton(oriButton, movingButton);
         Move movePos = talabiaView.getButtonPosition(movingButton);
-        talabiaBoard.movePiece(movingPiece, movePos);
+        // talabiaGame.movePiece
+        talabiaGame.movePiece(movingPiece, movePos);
+        talabiaGame.setTurn();
+        talabiaGame.setPlayer();
     }
 
     // Check if the button is a move button

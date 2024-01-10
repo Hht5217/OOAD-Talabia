@@ -7,7 +7,8 @@ public class Sun extends Piece {
         super(pieceName, yPos, xPos, color, pieceBoard);
     }
 
-    // Check if piece is allowed to move, add if allowed and do nothing if null
+    // Check if piece is allowed to move, add if allowed and do nothing if not
+    // available moves
     @Override
     // public void availableMoves() {
     public List<Move> getAvailableMoves() {

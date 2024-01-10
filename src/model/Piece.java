@@ -25,7 +25,8 @@ public abstract class Piece {
 
     // Get the image of the chess piece with given name (can move to View class)
     public ImageIcon getPieceImage(int buttonWidth, int buttonHeight) {
-        String imageName = toString() + ".png";
+        String pieceName = toString().substring(0, toString().length() - 1);
+        String imageName = pieceName + ".png";
         URL imageUrl = getClass().getClassLoader().getResource(imageName);
 
         if (imageUrl != null) {
