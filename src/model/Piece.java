@@ -1,10 +1,7 @@
 package model;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.*;
-import javax.swing.*;
 
 public abstract class Piece {
     protected String pieceName;
@@ -23,20 +20,11 @@ public abstract class Piece {
         this.pieceBoard = pieceBoard;
     }
 
-    // Get the image of the chess piece with given name (can move to View class)
-    public ImageIcon getPieceImage(int buttonWidth, int buttonHeight) {
+    // Get the image file name from piece name
+    public String getImageName() {
         String pieceName = toString().substring(0, toString().length() - 1);
         String imageName = pieceName + ".png";
-        URL imageUrl = getClass().getClassLoader().getResource(imageName);
-
-        if (imageUrl != null) {
-            Image image = new ImageIcon(imageUrl).getImage();
-            Image scaledImage = image.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
-            return new ImageIcon(scaledImage);
-        } else {
-            System.out.println("Image not found: " + imageName);
-            return null;
-        }
+        return imageName;
     }
 
     // Get y position of piece

@@ -22,15 +22,19 @@ public class Controller {
 
     // Initialize controller
     public void initController() {
-        JButton[][] viewButtons = talabiaView.getChessButtons();
+        JButton[][] initButtons = talabiaView.getChessButtons();
 
-        for (int r = 0; r < viewButtons.length; r++) {
-            for (int c = 0; c < viewButtons[r].length; c++) {
-                JButton selectedButton = viewButtons[r][c];
-                selectedButton.addMouseListener(new MouseAdapter() {
+        for (int r = 0; r < 6; r++) {
+            for (int c = 0; c < 7; c++) {
+                JButton button = initButtons[r][c];
+                Piece piece = talabiaBoard.getPiece(r, c);
+                if (piece != null) {
+                    talabiaView.setPieceImage(button, piece.getImageName());
+                }
+                button.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        mouseAction(selectedButton, talabiaBoard.getBoard());
+                        mouseAction(button, talabiaBoard.getBoard());
                     }
                 });
             }
@@ -51,7 +55,7 @@ public class Controller {
                 selectPiece(selectedButton, selectedPiece);
             }
         } else if (lastSelectPiece != null && isMoveButton(selectedButton, lastSelectPiece)) {
-            talabiaView.hideAvailableMoves(lastSelectPiece);
+            talabiaView.hideAvailableMoves(lastSelectPiece.getAvailableMoves());
             moveSelected(lastSelectButton, selectedButton, lastSelectPiece);
             deselectPiece(lastSelectButton, lastSelectPiece);
             System.out.println("Moved\n*******************************"); // test
@@ -63,7 +67,7 @@ public class Controller {
     private void selectPiece(JButton button, Piece piece) {
         piece.setSelected(true);
         talabiaView.selectButton(button);
-        talabiaView.showAvailableMoves(piece);
+        talabiaView.showAvailableMoves(piece.getAvailableMoves());
         lastSelectPiece = piece;
         lastSelectButton = button;
     }
@@ -72,7 +76,7 @@ public class Controller {
     private void deselectPiece(JButton button, Piece piece) {
         piece.setSelected(false);
         talabiaView.deselectButton(button);
-        talabiaView.hideAvailableMoves(piece);
+        talabiaView.hideAvailableMoves(piece.getAvailableMoves());
         lastSelectPiece = null;
         lastSelectButton = null;
     }
