@@ -153,8 +153,7 @@ public class Game {
 
     // Move piece to new position
     public void movePiece(Piece piece, Move movePos) {
-        gameBoard.setPiece(piece, movePos);
-        // gameBoard.removePiece(piece);
+        gameBoard.setPiece(piece, movePos); // change to boolean
 
         if (piece instanceof Point) {
             ((Point) piece).updateDirection();

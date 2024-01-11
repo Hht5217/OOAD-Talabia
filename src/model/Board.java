@@ -23,7 +23,9 @@ public class Board implements BoardCallback {
         pieces[addY][addX] = pieceToAdd;
     }
 
-    // Update chess pieces on board, this is different than add piece method
+    // Update chess pieces on board, this is different than add piece method (change
+    // this to boolean to send signal to game class to determine if sun captured
+    // then game over)
     public void setPiece(Piece piece, Move move) {
         int oldYPos = piece.getYPos();
         int oldXPos = piece.getXPos();
