@@ -1,19 +1,19 @@
 package model;
 
-import java.util.ArrayList;
+//import java.util.ArrayList; (list might not be needed in this class)
 
 // Model class
 public class Game {
-    private ArrayList<Piece> player1Pieces;
-    private ArrayList<Piece> player2Pieces;
+    // private ArrayList<Piece> player1Pieces;
+    // private ArrayList<Piece> player2Pieces;
     private Board gameBoard;
-    private int currentTurn = 0;
+    private int moveCount = 0;
     private Color currentPlayer = Color.YELLOW;
 
     public Game() {
         gameBoard = new Board();
-        player1Pieces = new ArrayList<Piece>();
-        player2Pieces = new ArrayList<Piece>();
+        // player1Pieces = new ArrayList<Piece>();
+        // player2Pieces = new ArrayList<Piece>();
         addYPoint();
         addBPoint();
         addYPlus();
@@ -29,20 +29,19 @@ public class Game {
         gameBoard.printBoard();
     }
 
-    // number of piece
     public void addYPoint() {
         for (int i = 0; i < 7; i++) {
-            Piece points = new ThePoint(("yPoint" + (i + 1)), 4, i, Color.YELLOW, "NORTH", gameBoard);
+            Piece points = new Point(Integer.toString(i + 1), 4, i, Color.YELLOW, "NORTH", gameBoard);
             gameBoard.addPiece(points);
-            player2Pieces.add(points);
+            // player2Pieces.add(points);
         }
     }
 
     public void addBPoint() {
         for (int i = 0; i < 7; i++) {
-            Piece points = new ThePoint(("bPoint" + (i + 1)), 1, i, Color.BLUE, "SOUTH", gameBoard);
+            Piece points = new Point(Integer.toString(i + 1), 1, i, Color.BLUE, "SOUTH", gameBoard);
             gameBoard.addPiece(points);
-            player1Pieces.add(points);
+            // player1Pieces.add(points);
         }
     }
 
@@ -50,92 +49,92 @@ public class Game {
         // int row = 5;
         // int col1 = 0;
         // int col2 = 6;
-        Piece points = new Plus("yPlus1", 5, 0, Color.YELLOW, gameBoard);
-        Piece points2 = new Plus("yPlus2", 5, 6, Color.YELLOW, gameBoard);
-        gameBoard.addPiece(points);
-        gameBoard.addPiece(points2);
-        player2Pieces.add(points);
+        Piece plus1 = new Plus("8", 5, 0, Color.YELLOW, gameBoard);
+        Piece plus2 = new Plus("9", 5, 6, Color.YELLOW, gameBoard);
+        gameBoard.addPiece(plus1);
+        gameBoard.addPiece(plus2);
+        // player2Pieces.add(plus1);
     }
 
     public void addBPlus() {
         // int row = 0;
         // int col1 = 0;
         // int col2 = 6;
-        Piece points = new Plus("bPlus1", 0, 0, Color.BLUE, gameBoard);
-        Piece points2 = new Plus("bPlus2", 0, 6, Color.BLUE, gameBoard);
-        gameBoard.addPiece(points);
-        gameBoard.addPiece(points2);
-        player1Pieces.add(points);
+        Piece plus1 = new Plus("8", 0, 0, Color.BLUE, gameBoard);
+        Piece plus2 = new Plus("9", 0, 6, Color.BLUE, gameBoard);
+        gameBoard.addPiece(plus1);
+        gameBoard.addPiece(plus2);
+        // player1Pieces.add(points);
     }
 
     public void addYHourglass() {
         // int row = 5;
         // int col1 = 1;
         // int col2 = 5;
-        Piece points = new HourGlass("yHourglass1", 5, 1, Color.YELLOW, gameBoard);
-        Piece points2 = new HourGlass("yHourglass2", 5, 5, Color.YELLOW, gameBoard);
-        gameBoard.addPiece(points);
-        gameBoard.addPiece(points2);
-        player2Pieces.add(points);
+        Piece hourglass1 = new HourGlass("10", 5, 1, Color.YELLOW, gameBoard);
+        Piece hourglass2 = new HourGlass("11", 5, 5, Color.YELLOW, gameBoard);
+        gameBoard.addPiece(hourglass1);
+        gameBoard.addPiece(hourglass2);
+        // player2Pieces.add(points);
     }
 
     public void addBHourglass() {
         // int row = 0;
         // int col1 = 1;
         // int col2 = 5;
-        Piece points = new HourGlass("bHourglass1", 0, 1, Color.BLUE, gameBoard);
-        Piece points2 = new HourGlass("bHourglass2", 0, 5, Color.BLUE, gameBoard);
-        gameBoard.addPiece(points);
-        gameBoard.addPiece(points2);
-        player1Pieces.add(points);
+        Piece hourglass1 = new HourGlass("10", 0, 1, Color.BLUE, gameBoard);
+        Piece hourglass2 = new HourGlass("11", 0, 5, Color.BLUE, gameBoard);
+        gameBoard.addPiece(hourglass1);
+        gameBoard.addPiece(hourglass2);
+        // player1Pieces.add(points);
     }
 
     public void addYTime() {
         // int row = 5;
         // int col1 = 2;
         // int col2 = 4;
-        Piece points = new Time("yTime1", 5, 2, Color.YELLOW, gameBoard);
-        Piece points2 = new Time("yTime2", 5, 4, Color.YELLOW, gameBoard);
-        gameBoard.addPiece(points);
-        gameBoard.addPiece(points2);
-        player2Pieces.add(points);
+        Piece time1 = new Time("12", 5, 2, Color.YELLOW, gameBoard);
+        Piece time2 = new Time("13", 5, 4, Color.YELLOW, gameBoard);
+        gameBoard.addPiece(time1);
+        gameBoard.addPiece(time2);
+        // player2Pieces.add(points);
     }
 
     public void addBTime() {
         // int row = 0;
         // int col1 = 2;
         // int col2 = 4;
-        Piece points = new Time("bTime1", 0, 2, Color.BLUE, gameBoard);
-        Piece points2 = new Time("bTime2", 0, 4, Color.BLUE, gameBoard);
-        gameBoard.addPiece(points);
-        gameBoard.addPiece(points2);
-        player1Pieces.add(points);
+        Piece time1 = new Time("12", 0, 2, Color.BLUE, gameBoard);
+        Piece time2 = new Time("13", 0, 4, Color.BLUE, gameBoard);
+        gameBoard.addPiece(time1);
+        gameBoard.addPiece(time2);
+        // player1Pieces.add(points);
     }
 
     public void addYSun() {
         // int row = 5;
         // int col = 3;
-        Piece points = new Sun("ySun1", 5, 3, Color.YELLOW, gameBoard);
-        gameBoard.addPiece(points);
-        player2Pieces.add(points);
+        Piece sun = new Sun("14", 5, 3, Color.YELLOW, gameBoard);
+        gameBoard.addPiece(sun);
+        // player2Pieces.add(points);
     }
 
     public void addBSun() {
         // int row = 0;
         // int col = 3;
-        Piece points = new Sun("bSun1", 0, 3, Color.BLUE, gameBoard);
-        gameBoard.addPiece(points);
-        player1Pieces.add(points);
+        Piece sun = new Sun("14", 0, 3, Color.BLUE, gameBoard);
+        gameBoard.addPiece(sun);
+        // player1Pieces.add(points);
     }
 
     // Get number of current turn
-    public int getTurn() {
-        return currentTurn;
+    public int getMoveCount() {
+        return moveCount;
     }
 
     // Set turn by incrementing with 1
-    public void setTurn() {
-        currentTurn = currentTurn + 1;
+    public void setMoveCount() {
+        moveCount = moveCount + 1;
     }
 
     // Get current player
@@ -157,13 +156,26 @@ public class Game {
         gameBoard.setPiece(piece, movePos);
         // gameBoard.removePiece(piece);
 
-        if (piece instanceof ThePoint) {
-            ((ThePoint) piece).updateDirection();
+        if (piece instanceof Point) {
+            ((Point) piece).updateDirection();
         }
     }
 
     // Get the board that contains the pieces
     public Board getGameBoard() {
         return gameBoard;
+    }
+
+    // Check whether to transform pieces
+    public boolean checkTransformation() {
+        if (moveCount % 4 == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    // Transform pieces
+    public void allowTransformation() {
+        gameBoard.transformPieces();
     }
 }

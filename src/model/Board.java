@@ -1,13 +1,14 @@
 package model;
 
-public class Board {
+public class Board implements BoardCallback {
     private Piece[][] pieces;
 
     public Board() {
         this.pieces = new Piece[6][7];
     }
 
-    // Check if specific location is empty
+    // Check if specific location is empty (callback)
+    @Override
     public boolean isEmptySpace(int yPos, int xPos) {
         if (pieces[yPos][xPos] == null) {
             return true;
@@ -34,47 +35,46 @@ public class Board {
         pieces[oldYPos][oldXPos] = null; // Remove piece from old position
     }
 
-    // // Move piece to new position
-    // public void movePiece(Piece piece, Move movePos) {
-    // // Get old position of piece
-    // int oldYPos = piece.getYPos();
-    // int oldXPos = piece.getXPos();
-    // int newYPos = movePos.getMoveRow();
-    // int newXPos = movePos.getMoveColumn();
+    // transform
+    public void transformPieces() {
+        int transformCount = 0; // test
+        for (int r = 0; r < pieces.length; r++) {
+            for (int c = 0; c < pieces[r].length; c++) {
+                if (!isEmptySpace(r, c)) {
+                    Piece original = pieces[r][c];
+                    if (original.getType().equals("Plus") || original.getType().equals("Time")) {
+                        // System.out.println(original.getType()); // test
+                        Piece toTransform = original.transform();
+                        pieces[r][c] = toTransform;
+                        System.out.println(toTransform.getType() + "|" + toTransform.toString()); // test
+                        transformCount++; // test
+                    }
+                }
+            }
+        }
+        System.out.println("Transformed: " + transformCount); // test
+    }
 
-    // pieces[newYPos][newXPos] = piece; // Place the piece at the new position
-    // piece.setPos(newYPos, newXPos); // Update the value of y and x of piece
-    // pieces[oldYPos][oldXPos] = null; // Remove piece from old position
-
-    // if (piece instanceof ThePoint) {
-    // ((ThePoint) piece).updateDirection();
-    // }
-    // }
-
-    // Check if the piece is within the board
+    // Check if the piece is within the board (callback)
+    @Override
     public boolean inBoard(int yPos, int xPos) {
         return xPos >= 0 && xPos < getX() && yPos >= 0 && yPos < getY();
     }
 
-    // // Check status of specific location on board (currently not in use)
-    // public Piece pieceLocation(int yPos, int xPos) {
-    // if (inBoard(yPos, xPos)) {
-    // return getPiece(yPos, xPos);
-    // }
-    // return null;
-    // }
-
-    // Get length X (row) of board
-    public int getX() {
-        return pieces[0].length;
-    }
-
     // Get length Y (column) of board
+    @Override // testing to see if can solve circular reference
     public int getY() {
         return pieces.length;
     }
 
-    // Return piece at specific location
+    // Get length X (row) of board
+    @Override // testing to see if can solve circular reference
+    public int getX() {
+        return pieces[0].length;
+    }
+
+    // Return piece at specific location (callback)
+    @Override
     public Piece getPiece(int yPos, int xPos) {
         return pieces[yPos][xPos];
     }

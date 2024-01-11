@@ -29,7 +29,7 @@ public class Controller {
                 JButton button = initButtons[r][c];
                 Piece piece = talabiaBoard.getPiece(r, c);
                 if (piece != null) {
-                    talabiaView.setPieceImage(button, piece.getImageName());
+                    talabiaView.setPieceImage(button, piece.toString());
                 }
                 button.addMouseListener(new MouseAdapter() {
                     @Override
@@ -87,7 +87,11 @@ public class Controller {
         Move movePos = talabiaView.getButtonPosition(movingButton);
         // talabiaGame.movePiece
         talabiaGame.movePiece(movingPiece, movePos);
-        talabiaGame.setTurn();
+        talabiaGame.setMoveCount();
+        if (talabiaGame.checkTransformation()) {
+            talabiaGame.allowTransformation();
+            talabiaView.transformImage();
+        }
         talabiaGame.setPlayer();
     }
 

@@ -2,11 +2,11 @@ package model;
 
 import java.util.List;
 
-public class ThePoint extends Piece {
+public class Point extends Piece {
     private String moveDirection;
 
-    public ThePoint(String pieceName, int yPos, int xPos, Color color, String moveDirection, Board pieceBoard) {
-        super(pieceName, yPos, xPos, color, pieceBoard);
+    public Point(String id, int yPos, int xPos, Color color, String moveDirection, BoardCallback pieceBoard) {
+        super(id, yPos, xPos, color, pieceBoard);
         this.moveDirection = moveDirection;
     }
 

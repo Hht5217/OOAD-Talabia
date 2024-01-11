@@ -40,7 +40,8 @@ public class View {
     }
 
     // (alternative to above)
-    public void setPieceImage(JButton buttonToSet, String imageName) {
+    public void setPieceImage(JButton buttonToSet, String pieceName) {
+        String imageName = (pieceName.replaceAll("[0-9]", "")) + ".png";
         URL imageUrl = getClass().getClassLoader().getResource(imageName);
 
         int buttonWidth = buttonToSet.getWidth();
@@ -48,9 +49,11 @@ public class View {
         if (imageUrl != null) {
             Image image = new ImageIcon(imageUrl).getImage();
             ImageIcon icon = new ImageIcon(image.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH));
+            icon.setDescription(imageName);
+            // System.out.println(icon.getDescription()); // test
             buttonToSet.setIcon(icon);
         } else {
-            System.out.println("Image not found: " + imageName);
+            System.out.println("Image not found: " + pieceName);
         }
     }
 
@@ -85,6 +88,31 @@ public class View {
         Icon icon = oriButton.getIcon();
         movingButton.setIcon(icon);
         oriButton.setIcon(null);
+    }
+
+    public void transformImage() {
+        for (int r = 0; r < 6; r++) {
+            for (int c = 0; c < 7; c++) {
+                Icon originalIcon = chessButtons[r][c].getIcon();
+                if (originalIcon != null && originalIcon instanceof ImageIcon) {
+                    String originalIconName = ((ImageIcon) originalIcon).getDescription();
+                    String newImageName = null;
+                    if (originalIconName.equals("yPlus.png")) {
+                        newImageName = "yTime";
+                    } else if (originalIconName.equals("yTime.png")) {
+                        newImageName = "yPlus";
+                    } else if (originalIconName.equals("bPlus.png")) {
+                        newImageName = "bTime";
+                    } else if (originalIconName.equals("bTime.png")) {
+                        newImageName = "bPlus";
+                    }
+                    if (newImageName != null) {
+                        setPieceImage(chessButtons[r][c], newImageName);
+                    }
+                }
+            }
+        }
+        System.out.println("Transform image"); // test
     }
 
     // Get chess buttons array
