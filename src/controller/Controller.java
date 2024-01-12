@@ -13,6 +13,7 @@ public class Controller implements GameObserver {
     private Board talabiaBoard;
     private JButton lastSelectButton = null;
     private Piece lastSelectPiece = null;
+    private boolean isGameOver = false;
 
     public Controller(Game tGame, View tView) {
         this.talabiaGame = tGame;
@@ -44,6 +45,9 @@ public class Controller implements GameObserver {
 
     // Almost all action are done by mouse action
     private void mouseAction(JButton selectedButton, Piece[][] gameBoard) {
+        if (isGameOver) { // if game over is true the method stops at here, as it returns nothing
+            return;
+        }
         Piece selectedPiece = matchPieceButton(selectedButton, gameBoard);
         System.out.println("Current: " + selectedButton.getName()); // test
         if (selectedPiece != null && selectedPiece.getColor() == talabiaGame.getPlayer()) {
@@ -120,6 +124,7 @@ public class Controller implements GameObserver {
 
     @Override
     public void onGameOver() {
+        isGameOver = true; // change state to game over true
         talabiaView.displayGameOver();
     }
 }

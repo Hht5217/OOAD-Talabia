@@ -1,4 +1,4 @@
-import controller.Controller;
+import controller.*;
 import model.*;
 import view.*;
 
