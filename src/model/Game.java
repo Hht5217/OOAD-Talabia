@@ -1,6 +1,8 @@
 package model;
 
-//import java.util.ArrayList; (list might not be needed in this class)
+import controller.GameObserver;
+import java.util.List;
+import java.util.ArrayList;
 
 // Model class
 public class Game {
@@ -9,6 +11,7 @@ public class Game {
     private Board gameBoard;
     private int moveCount = 0;
     private Color currentPlayer = Color.YELLOW;
+    private List<GameObserver> observers = new ArrayList<>();
 
     public Game() {
         gameBoard = new Board();
@@ -29,6 +32,7 @@ public class Game {
         gameBoard.printBoard();
     }
 
+    ///////////////////// Add pieces /////////////////////
     public void addYPoint() {
         for (int i = 0; i < 7; i++) {
             Piece points = new Point(Integer.toString(i + 1), 4, i, Color.YELLOW, "NORTH", gameBoard);
@@ -127,6 +131,25 @@ public class Game {
         // player1Pieces.add(points);
     }
 
+    ///////////////////// Other methods /////////////////////
+
+    // Register observer
+    public void addObserver(GameObserver observer) {
+        observers.add(observer);
+    }
+
+    // Remove observer
+    public void removeObserver(GameObserver observer) {
+        observers.remove(observer);
+    }
+
+    // Notify observers when game is over
+    private void notifyGameOver() {
+        for (GameObserver observer : observers) {
+            observer.onGameOver();
+        }
+    }
+
     // Get number of current turn
     public int getMoveCount() {
         return moveCount;
@@ -151,9 +174,12 @@ public class Game {
         }
     }
 
-    // Move piece to new position
+    // Move piece to new position, then if sun is captured notify observer
     public void movePiece(Piece piece, Move movePos) {
-        gameBoard.setPiece(piece, movePos); // change to boolean
+        if (gameBoard.setPiece(piece, movePos)) {
+            notifyGameOver();
+            System.out.println("Board: sun captured"); // test
+        }
 
         if (piece instanceof Point) {
             ((Point) piece).updateDirection();

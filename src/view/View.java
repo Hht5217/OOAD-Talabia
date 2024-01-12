@@ -8,10 +8,11 @@ import javax.swing.*;
 import model.*;
 
 public class View {
+    private JFrame talabiaFrame;
     private JButton[][] chessButtons = new JButton[6][7];
 
     public View() {
-        JFrame talabiaFrame = new JFrame("Talabia");
+        talabiaFrame = new JFrame("Talabia");
         talabiaFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         talabiaFrame.setSize(700, 600);
         JPanel boardPanel = new JPanel();
@@ -131,5 +132,10 @@ public class View {
         }
 
         return null;
+    }
+
+    // Display game over message (add parameters to show who won)
+    public void displayGameOver() {
+        JOptionPane.showMessageDialog(talabiaFrame, "Game Over!", "Talabia", JOptionPane.INFORMATION_MESSAGE);
     }
 }

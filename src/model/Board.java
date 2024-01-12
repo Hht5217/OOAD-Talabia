@@ -23,18 +23,22 @@ public class Board implements BoardCallback {
         pieces[addY][addX] = pieceToAdd;
     }
 
-    // Update chess pieces on board, this is different than add piece method (change
-    // this to boolean to send signal to game class to determine if sun captured
-    // then game over)
-    public void setPiece(Piece piece, Move move) {
+    /**
+     * Update chess pieces on board, and also check if captured piece is Sun
+     */
+    public boolean setPiece(Piece piece, Move move) {
         int oldYPos = piece.getYPos();
         int oldXPos = piece.getXPos();
         int newYPos = move.getMoveRow();
         int newXPos = move.getMoveColumn();
 
+        if (!isEmptySpace(newYPos, newXPos) && pieces[newYPos][newXPos].getType().equals("Sun")) {
+            return true; // return true if position is a piece and it is Sun
+        }
         pieces[newYPos][newXPos] = piece; // Place the piece at the new position
         piece.setPos(newYPos, newXPos); // Update the value of y and x of piece
         pieces[oldYPos][oldXPos] = null; // Remove piece from old position
+        return false;
     }
 
     // transform

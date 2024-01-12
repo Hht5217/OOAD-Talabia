@@ -7,7 +7,7 @@ import view.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Controller {
+public class Controller implements GameObserver {
     private Game talabiaGame;
     private View talabiaView;
     private Board talabiaBoard;
@@ -18,6 +18,7 @@ public class Controller {
         this.talabiaGame = tGame;
         this.talabiaView = tView;
         this.talabiaBoard = tGame.getGameBoard();
+        talabiaGame.addObserver(this);
     }
 
     // Initialize controller
@@ -85,7 +86,6 @@ public class Controller {
     private void moveSelected(JButton oriButton, JButton movingButton, Piece movingPiece) {
         talabiaView.moveButton(oriButton, movingButton);
         Move movePos = talabiaView.getButtonPosition(movingButton);
-        // talabiaGame.movePiece
         talabiaGame.movePiece(movingPiece, movePos);
         talabiaGame.setMoveCount();
         if (talabiaGame.checkTransformation()) {
@@ -116,5 +116,10 @@ public class Controller {
         int r = Integer.parseInt(namePos[1]);
         int c = Integer.parseInt(namePos[2]);
         return gameBoard[r][c];
+    }
+
+    @Override
+    public void onGameOver() {
+        talabiaView.displayGameOver();
     }
 }
