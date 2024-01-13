@@ -18,6 +18,7 @@ public class Controller implements GameObserver {
     public Controller(Game tGame, View tView) {
         this.talabiaGame = tGame;
         this.talabiaView = tView;
+        talabiaView.setStatLabels(talabiaGame.getPlayer(), talabiaGame.getMoveCount());
         this.talabiaBoard = tGame.getGameBoard();
         talabiaGame.addObserver(this);
     }
@@ -97,6 +98,7 @@ public class Controller implements GameObserver {
             talabiaView.transformImage();
         }
         talabiaGame.setPlayer();
+        talabiaView.setStatLabels(talabiaGame.getPlayer(), talabiaGame.getMoveCount());
     }
 
     // Check if the button is a move button

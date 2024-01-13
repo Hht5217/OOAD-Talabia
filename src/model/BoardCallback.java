@@ -7,7 +7,7 @@ public interface BoardCallback {
 
     boolean inBoard(int yPos, int xPos);
 
-    int getY();
+    int getBoardRow();
 
-    int getX();
+    int getBoardColumn();
 }

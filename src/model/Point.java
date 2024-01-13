@@ -24,7 +24,7 @@ public class Point extends Piece {
             int newY = initialY + (i * directionMultiplier);
 
             // Check if the new position is within the board bounds
-            if (newY >= 0 && newY < pieceBoard.getY()) {
+            if (newY >= 0 && newY < pieceBoard.getBoardRow()) {
                 Piece potentialPiece = pieceBoard.getPiece(newY, initialX);
                 // If the space is empty, add the move
                 if (potentialPiece == null) {
@@ -50,7 +50,7 @@ public class Point extends Piece {
             moveDirection = "SOUTH";
         }
         // Check if the piece is at the south border and facing SOUTH
-        else if (getYPos() == pieceBoard.getY() - 1 && "SOUTH".equals(moveDirection)) {
+        else if (getYPos() == pieceBoard.getBoardRow() - 1 && "SOUTH".equals(moveDirection)) {
             moveDirection = "NORTH";
         }
     }

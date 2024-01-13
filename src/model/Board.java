@@ -2,9 +2,11 @@ package model;
 
 public class Board implements BoardCallback {
     private Piece[][] pieces;
+    private static final int BOARD_ROW = 6;
+    private static final int BOARD_COL = 7;
 
     public Board() {
-        this.pieces = new Piece[6][7];
+        this.pieces = new Piece[BOARD_ROW][BOARD_COL];
     }
 
     // Check if specific location is empty (callback)
@@ -44,8 +46,8 @@ public class Board implements BoardCallback {
     // transform
     public void transformPieces() {
         int transformCount = 0; // test
-        for (int r = 0; r < pieces.length; r++) {
-            for (int c = 0; c < pieces[r].length; c++) {
+        for (int r = 0; r < BOARD_ROW; r++) {
+            for (int c = 0; c < BOARD_COL; c++) {
                 if (!isEmptySpace(r, c)) {
                     Piece original = pieces[r][c];
                     if (original.getType().equals("Plus") || original.getType().equals("Time")) {
@@ -61,22 +63,22 @@ public class Board implements BoardCallback {
         System.out.println("Transformed: " + transformCount); // test
     }
 
-    // Check if the piece is within the board (callback)
+    // Check if the piece is within the board range (callback)
     @Override
     public boolean inBoard(int yPos, int xPos) {
-        return xPos >= 0 && xPos < getX() && yPos >= 0 && yPos < getY();
+        return xPos >= 0 && xPos < getBoardColumn() && yPos >= 0 && yPos < getBoardRow();
     }
 
     // Get length Y (column) of board
     @Override // testing to see if can solve circular reference
-    public int getY() {
-        return pieces.length;
+    public int getBoardRow() {
+        return BOARD_ROW;
     }
 
     // Get length X (row) of board
     @Override // testing to see if can solve circular reference
-    public int getX() {
-        return pieces[0].length;
+    public int getBoardColumn() {
+        return BOARD_COL;
     }
 
     // Return piece at specific location (callback)
@@ -92,16 +94,22 @@ public class Board implements BoardCallback {
 
     // Test purpose, might use to save game later
     public void printBoard() {
-        for (int i = 0; i < pieces.length; i++) {
-            for (int j = 0; j < pieces[i].length; j++) {
-                if (isEmptySpace(i, j)) {
-                    System.out.print(String.format("%12s", "null"));
+        for (int r = 0; r < BOARD_ROW; r++) {
+            for (int c = 0; c < BOARD_COL; c++) {
+                if (isEmptySpace(r, c)) {
+                    // System.out.print(String.format("%12s", "null"));
+                    System.out.print(" ");
                 } else {
-                    System.out.print(String.format("%12s", pieces[i][j].toString()));
+                    // System.out.print(String.format("%12s", pieces[i][j].toString()));
+                    if (pieces[r][c].getColor() == Color.YELLOW) {
+                        System.out.print("y");
+                    } else {
+                        System.out.print("b");
+                    }
                 }
                 System.out.print("|");
             }
-            System.out.println("\n" + "-".repeat(91));
+            System.out.println("\n" + "-".repeat(15));
         }
     }
 }

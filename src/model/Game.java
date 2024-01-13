@@ -29,7 +29,7 @@ public class Game {
         addBSun();
 
         // Test purpose
-        gameBoard.printBoard();
+        gameBoard.printBoard(); // test
     }
 
     ///////////////////// Add pieces /////////////////////
