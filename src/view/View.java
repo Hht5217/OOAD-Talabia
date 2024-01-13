@@ -151,7 +151,10 @@ public class View extends JFrame {
 
     // Update labels
     public void setStatLabels(model.Color player, int moveCount) {
-        moveCountLabel.setText("Move Count: " + Integer.toString(moveCount));
+        /**
+         * space at the end to prevent text sticking to window
+         */
+        moveCountLabel.setText("Move Count: " + Integer.toString(moveCount) + " ");
         if (moveCount == 0) {
             String currentPlayer = (player == Color.YELLOW) ? "YELLOW" : "BLUE";
             playerLabel.setText("Current player: " + currentPlayer);
