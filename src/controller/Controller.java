@@ -1,45 +1,39 @@
 package controller;
 
 import model.*;
+import pieces.*;
 import view.*;
 
-//import java.awt.*;
-import java.awt.event.*;
+import java.awt.*;
 import javax.swing.*;
 
 public class Controller implements GameObserver {
-    private Game talabiaGame;
-    private View talabiaView;
-    private Board talabiaBoard;
+    private Game game;
+    private View view;
+    private Board board;
     private JButton lastSelectButton = null;
     private Piece lastSelectPiece = null;
     private boolean isGameOver = false;
 
-    public Controller(Game tGame, View tView) {
-        this.talabiaGame = tGame;
-        this.talabiaView = tView;
-        talabiaView.setStatLabels(talabiaGame.getPlayer(), talabiaGame.getMoveCount());
-        this.talabiaBoard = tGame.getGameBoard();
-        talabiaGame.addObserver(this);
+    public Controller(Game talabiaGame, View talabiaView) {
+        this.game = talabiaGame;
+        this.view = talabiaView;
+        view.setStatLabels(game.getPlayer(), game.getMoveCount());
+        this.board = game.getGameBoard();
+        game.addObserver(this);
     }
 
     // Initialize controller
     public void initController() {
-        JButton[][] initButtons = talabiaView.getChessButtons();
-
+        // JButton[][] initButtons = view.getChessButtons();
         for (int r = 0; r < 6; r++) {
             for (int c = 0; c < 7; c++) {
-                JButton button = initButtons[r][c];
-                Piece piece = talabiaBoard.getPiece(r, c);
+                JButton button = view.getButton(r, c);
+                Piece piece = board.getPiece(r, c);
                 if (piece != null) {
-                    talabiaView.setPieceImage(button, piece.toString());
+                    view.setPieceImage(button, piece.toString());
                 }
-                button.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        mouseAction(button, talabiaBoard.getBoard());
-                    }
-                });
+                button.addActionListener(e -> mouseAction(button, board.getBoard()));
             }
         }
     }
@@ -51,7 +45,7 @@ public class Controller implements GameObserver {
         }
         Piece selectedPiece = matchPieceButton(selectedButton, gameBoard);
         System.out.println("Current: " + selectedButton.getName()); // test
-        if (selectedPiece != null && selectedPiece.getColor() == talabiaGame.getPlayer()) {
+        if (selectedPiece != null && selectedPiece.getColor() == game.getPlayer()) {
             if (selectedButton == lastSelectButton) {
                 deselectPiece(lastSelectButton, lastSelectPiece);
             } else if (lastSelectButton == null || !isMoveButton(selectedButton, lastSelectPiece)) {
@@ -61,19 +55,19 @@ public class Controller implements GameObserver {
                 selectPiece(selectedButton, selectedPiece);
             }
         } else if (lastSelectPiece != null && isMoveButton(selectedButton, lastSelectPiece)) {
-            talabiaView.hideAvailableMoves(lastSelectPiece.getAvailableMoves());
+            view.setAvailableMovesColor(lastSelectPiece.getAvailableMoves(), Color.WHITE);
             moveSelected(lastSelectButton, selectedButton, lastSelectPiece);
             deselectPiece(lastSelectButton, lastSelectPiece);
             System.out.println("Moved\n*******************************"); // test
-            talabiaBoard.printBoard();
+            board.printBoard();
         }
     }
 
     // Select piece action
     private void selectPiece(JButton button, Piece piece) {
         piece.setSelected(true);
-        talabiaView.selectButton(button);
-        talabiaView.showAvailableMoves(piece.getAvailableMoves());
+        view.setButtonBackgroundColor(button, Color.BLUE);
+        view.setAvailableMovesColor(piece.getAvailableMoves(), Color.GREEN);
         lastSelectPiece = piece;
         lastSelectButton = button;
     }
@@ -81,24 +75,24 @@ public class Controller implements GameObserver {
     // Deselect piece action
     private void deselectPiece(JButton button, Piece piece) {
         piece.setSelected(false);
-        talabiaView.deselectButton(button);
-        talabiaView.hideAvailableMoves(piece.getAvailableMoves());
+        view.setButtonBackgroundColor(button, Color.WHITE);
+        view.setAvailableMovesColor(piece.getAvailableMoves(), Color.WHITE);
         lastSelectPiece = null;
         lastSelectButton = null;
     }
 
     // Move after piece's available move is clicked
     private void moveSelected(JButton oriButton, JButton movingButton, Piece movingPiece) {
-        talabiaView.moveButton(oriButton, movingButton);
-        Move movePos = talabiaView.getButtonPosition(movingButton);
-        talabiaGame.movePiece(movingPiece, movePos);
-        talabiaGame.setMoveCount();
-        if (talabiaGame.checkTransformation()) {
-            talabiaGame.allowTransformation();
-            talabiaView.transformImage();
+        view.moveButton(oriButton, movingButton);
+        Move movePos = view.getButtonPosition(movingButton);
+        game.movePiece(movingPiece, movePos);
+        game.setPlayer();
+        game.setMoveCount();
+        if (game.checkTransformation()) {
+            game.allowTransformation();
+            view.transformImage();
         }
-        talabiaGame.setPlayer();
-        talabiaView.setStatLabels(talabiaGame.getPlayer(), talabiaGame.getMoveCount());
+        view.setStatLabels(game.getPlayer(), game.getMoveCount());
     }
 
     // Check if the button is a move button
@@ -106,7 +100,7 @@ public class Controller implements GameObserver {
         if (piece == null) {
             return false;
         }
-        Move buttonPos = talabiaView.getButtonPosition(button);
+        Move buttonPos = view.getButtonPosition(button);
         for (Move move : piece.getAvailableMoves()) {
             if (move.getMoveRow() == buttonPos.getMoveRow() && move.getMoveColumn() == buttonPos.getMoveColumn()) {
                 return true;
@@ -124,9 +118,19 @@ public class Controller implements GameObserver {
         return gameBoard[r][c];
     }
 
+    /*
+     * Set the boolean to true when game over state is observed (notified by game
+     * class), and afterwards display a popup window
+     */
     @Override
     public void onGameOver() {
-        isGameOver = true; // change state to game over true
-        talabiaView.displayGameOver();
+        isGameOver = true;
+        view.displayGameOver(game.getPlayer().toString());
+    }
+
+    @Override
+    public void onSetGame() {
+        // get the model and update view accordingly
+        System.out.println("Observer: notified set game"); // test
     }
 }

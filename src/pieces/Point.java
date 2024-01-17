@@ -1,11 +1,13 @@
-package model;
+package pieces;
 
 import java.util.List;
+
+import model.*;
 
 public class Point extends Piece {
     private String moveDirection;
 
-    public Point(String id, int yPos, int xPos, Color color, String moveDirection, BoardCallback pieceBoard) {
+    public Point(String id, int yPos, int xPos, PlayerColor color, String moveDirection, BoardCallback pieceBoard) {
         super(id, yPos, xPos, color, pieceBoard);
         this.moveDirection = moveDirection;
     }

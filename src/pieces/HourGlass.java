@@ -1,14 +1,17 @@
-package model;
+package pieces;
 
 import java.util.List;
+import model.*;
 
 public class HourGlass extends Piece {
-    public HourGlass(String id, int yPos, int xPos, Color color, BoardCallback pieceBoard) {
+    public HourGlass(String id, int yPos, int xPos, PlayerColor color, BoardCallback pieceBoard) {
         super(id, yPos, xPos, color, pieceBoard);
     }
 
-    // Check if piece is allowed to move, add if allowed and do nothing if not
-    // available move
+    /*
+     * Check if piece is allowed to move, add if allowed and do nothing if not an
+     * available move
+     */
     @Override
     // public void availableMoves() {
     public List<Move> getAvailableMoves() {
@@ -16,7 +19,10 @@ public class HourGlass extends Piece {
         int currentY = getYPos();
         int currentX = getXPos();
 
-        // Define all possible L-shaped moves for the Hourglass piece
+        /*
+         * Define all possible L-shaped moves for the Hourglass piece in pair of y and x
+         * positions, then add them to the current position of the piece.
+         */
         int[][] offsets = {
                 { -2, -1 }, { -2, 1 },
                 { -1, -2 }, { -1, 2 },

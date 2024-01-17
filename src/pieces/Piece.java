@@ -1,21 +1,22 @@
-package model;
+package pieces;
 
 import java.util.ArrayList;
 import java.util.List;
+import model.*;
 
 public abstract class Piece {
     protected String id;
     protected String pieceName;
     protected int xPos;
     protected int yPos;
-    protected Color color;
+    protected PlayerColor color;
     protected BoardCallback pieceBoard;
     protected boolean selected = false;
     protected List<Move> movePos = new ArrayList<>();
 
-    public Piece(String id, int yPos, int xPos, Color color, BoardCallback pieceBoard) {
+    public Piece(String id, int yPos, int xPos, PlayerColor color, BoardCallback pieceBoard) {
         this.id = id;
-        if (color == Color.YELLOW) {
+        if (color == PlayerColor.YELLOW) {
             this.pieceName = "y" + getType() + id;
         } else {
             this.pieceName = "b" + getType() + id;
@@ -48,7 +49,7 @@ public abstract class Piece {
     }
 
     // Get color of piece
-    public Color getColor() {
+    public PlayerColor getColor() {
         return color;
     }
 

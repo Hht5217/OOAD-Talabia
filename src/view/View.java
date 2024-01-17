@@ -1,17 +1,18 @@
 package view;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.net.URL;
+import java.util.*;
 
 import javax.swing.*;
 
 import model.*;
-import model.Color;
 
 public class View extends JFrame {
-    // private JFrame talabiaFrame; // old
     private static final int ROWS = 6;
     private static final int COLUMN = 7;
+    private Map<String, JMenuItem> menuItems = new HashMap<>();
     // private JPanel menuScreen; // to be implement
     private JPanel gameScreen;
     private JLabel playerLabel;
@@ -19,13 +20,49 @@ public class View extends JFrame {
     private JButton[][] chessButtons = new JButton[ROWS][COLUMN];
 
     public View() {
-        // talabiaFrame = new JFrame("Talabia"); // old
         super("Talabia");
-        // talabiaFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // old
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // talabiaFrame.setSize(700, 600); // old
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                askSaveGame();
+                System.exit(0);
+            }
+        });
         setSize(new Dimension(700, 600));
 
+        /*
+         * These components are initialized here first so that it is not returned null
+         * when controller class is initialized
+         */
+        playerLabel = new JLabel("Current player:");
+        moveCountLabel = new JLabel("Move Count:");
+        // Adds empty button for the chess board
+        for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c < COLUMN; c++) {
+                String buttonName = ("r" + r + "c" + c);
+                JButton chessButton = new JButton(buttonName); // Set button text
+                chessButton.setName(buttonName);
+                Dimension buttonSize = new Dimension(100, 100);
+                chessButton.setSize(buttonSize);
+                chessButton.setText(null); // comment out if need to test
+                chessButton.setBackground(Color.WHITE);
+                chessButtons[r][c] = chessButton;
+            }
+        }
+
+        // add explanation
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                createGUI();
+                setLocationRelativeTo(null);
+                setVisible(true);
+            }
+        });
+    }
+
+    // Method to create GUI components
+    private void createGUI() {
         gameScreen = new JPanel();
         gameScreen.setLayout(new BorderLayout());
 
@@ -35,8 +72,6 @@ public class View extends JFrame {
          */
         JPanel statPanel = new JPanel(new BorderLayout());
 
-        playerLabel = new JLabel("Current player:");
-        moveCountLabel = new JLabel("Move Count:");
         statPanel.add(playerLabel, BorderLayout.WEST);
         statPanel.add(moveCountLabel, BorderLayout.EAST);
 
@@ -49,28 +84,66 @@ public class View extends JFrame {
         // Adds empty button for the chess board
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMN; c++) {
-                String buttonName = ("r" + r + "c" + c);
-                JButton chessButton = new JButton(buttonName); // Set button text
-                chessButton.setName(buttonName);
-                Dimension buttonSize = new Dimension(100, 100);
-                chessButton.setSize(buttonSize);
-                // chessButton.setText(null); // test, remember to uncomment
-                chessButton.setBackground(java.awt.Color.WHITE);
-                chessButtons[r][c] = chessButton;
-                boardPanel.add(chessButton);
+                boardPanel.add(chessButtons[r][c]);
             }
         }
 
-        // old
-        // talabiaFrame.add(boardPanel);
-        // talabiaFrame.setLocationRelativeTo(null);
-        // // talabiaFrame.pack();
-        // talabiaFrame.setVisible(true);
-
-        // maybe can call an update statPanel method here after everyhting else is done
         add(gameScreen);
-        setLocationRelativeTo(null);
-        setVisible(true);
+        JMenuBar gameMenuBar = createMenu();
+        setJMenuBar(gameMenuBar);
+    }
+
+    /*
+     * Separate method since this part is too long, and easy to modify such as add
+     * new menu item
+     */
+    private JMenuBar createMenu() {
+        // Create the menu bar
+        JMenuBar menuBar = new JMenuBar();
+
+        // Create menus (dropdown)
+        JMenu menuDropdown = new JMenu("Menu");
+        JMenu helpDropdwon = new JMenu("Help");
+
+        // Create menu items
+        JMenuItem newGameItem = new JMenuItem("New Game");
+        JMenuItem loadGameItem = new JMenuItem("Load Game");
+        JMenuItem saveGameItem = new JMenuItem("Save Game");
+        JMenuItem mainMenuItem = new JMenuItem("Main menu");
+        JMenuItem exitItem = new JMenuItem("Exit");
+
+        JMenuItem guideItem = new JMenuItem("How to play?");
+        JMenuItem aboutItem = new JMenuItem("About");
+
+        // Add menu items to the menu
+        menuDropdown.add(newGameItem);
+        menuDropdown.add(loadGameItem);
+        menuDropdown.add(saveGameItem);
+        menuDropdown.add(mainMenuItem);
+        menuDropdown.add(exitItem);
+
+        helpDropdwon.add(guideItem);
+        helpDropdwon.add(aboutItem);
+
+        // // Add the menu to the menu bar
+        menuBar.add(menuDropdown);
+        menuBar.add(helpDropdwon);
+
+        // Add every menu items to Map for adding listener use
+        menuItems.put("New", newGameItem);
+        menuItems.put("Load", loadGameItem);
+        menuItems.put("Save", saveGameItem);
+        menuItems.put("Main Menu", mainMenuItem);
+        menuItems.put("Guide", guideItem);
+        menuItems.put("About", aboutItem);
+        menuItems.put("Exit", exitItem);
+
+        return menuBar;
+    }
+
+    // Get specific menu item from the map using the key (the name)
+    public JMenuItem getMenuItem(String key) {
+        return menuItems.get(key);
     }
 
     // (alternative to above)
@@ -91,29 +164,16 @@ public class View extends JFrame {
         }
     }
 
-    // Highlight button selected
-    public void selectButton(JButton buttonSelected) {
-        buttonSelected.setBackground(java.awt.Color.GREEN);
+    // Set background color of a button
+    public void setButtonBackgroundColor(JButton button, Color color) {
+        button.setBackground(color);
     }
 
-    // Remove highlight from previously selected button
-    public void deselectButton(JButton buttonDeselect) {
-        buttonDeselect.setBackground(java.awt.Color.WHITE);
-    }
-
-    // Highlight available moves and the buttons related
-    public void showAvailableMoves(java.util.List<Move> availableMoves) {
+    // Highlight or hide available moves and the buttons related
+    public void setAvailableMovesColor(java.util.List<Move> availableMoves, Color color) {
         for (Move moves : availableMoves) {
             // System.out.println("Move:" + moves.toString()); // test
-            chessButtons[moves.getMoveRow()][moves.getMoveColumn()].setBackground(java.awt.Color.BLUE);
-        }
-    }
-
-    // Remove highlight from available moves buttons
-    public void hideAvailableMoves(java.util.List<Move> availableMoves) {
-        for (Move moves : availableMoves) {
-            // System.out.println("Move:" + moves.toString()); // test
-            chessButtons[moves.getMoveRow()][moves.getMoveColumn()].setBackground(java.awt.Color.WHITE);
+            chessButtons[moves.getMoveRow()][moves.getMoveColumn()].setBackground(color);
         }
     }
 
@@ -124,6 +184,7 @@ public class View extends JFrame {
         originalButton.setIcon(null);
     }
 
+    // Get image from original button and update the new button with it
     public void transformImage() {
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMN; c++) {
@@ -150,23 +211,19 @@ public class View extends JFrame {
     }
 
     // Update labels
-    public void setStatLabels(model.Color player, int moveCount) {
+    public void setStatLabels(PlayerColor player, int moveCount) {
         /**
          * space at the end to prevent text sticking to window
          */
         moveCountLabel.setText("Move Count: " + Integer.toString(moveCount) + " ");
-        if (moveCount == 0) {
-            String currentPlayer = (player == Color.YELLOW) ? "YELLOW" : "BLUE";
-            playerLabel.setText("Current player: " + currentPlayer);
-        } else {
-            String currentPlayer = (player == Color.YELLOW) ? "BLUE" : "YELLOW";
-            playerLabel.setText("Current player: " + currentPlayer);
-        }
+
+        String currentPlayer = (player == PlayerColor.YELLOW) ? "YELLOW" : "BLUE";
+        playerLabel.setText("Current player: " + currentPlayer);
     }
 
-    // Get chess buttons array
-    public JButton[][] getChessButtons() {
-        return chessButtons;
+    // Get a specific button from their position
+    public JButton getButton(int row, int col) {
+        return chessButtons[row][col];
     }
 
     // Get the button
@@ -183,9 +240,76 @@ public class View extends JFrame {
     }
 
     // Display game over message (add parameters to show who won)
-    public void displayGameOver() {
-        JOptionPane.showMessageDialog(gameScreen, "Game Over!", "Talabia", JOptionPane.INFORMATION_MESSAGE);
+    public void displayGameOver(String winner) {
+        JOptionPane.showMessageDialog(this, ("Game Over! " + winner + " has won!"), "Talabia",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // add a change Point direction method if possible
+    // Display pop up to confirm whether to save game
+    public void askSaveGame() {
+        int option = JOptionPane.showConfirmDialog(this, "Do you want to save the current game?", "Save Game",
+                JOptionPane.YES_NO_OPTION);
+        if (option == JOptionPane.YES_OPTION) {
+            System.out.println("Save game: Yes"); // test
+            // Save the game here
+        } else if (option == JOptionPane.NO_OPTION) {
+            System.out.println("Save game: No"); // test
+            // Don't save the game
+        }
+    }
+
+    // Display window that shows how to play the game
+    public void showGuide() {
+        JDialog dialog = new JDialog(this, "How to Play", true);
+
+        String guideMessage = "<html>"
+                + "<body>"
+                + "<p>Talabia Chess is an engaging game played by 2 players on a 7x6 board, with interactive<br>gameplay involving clicking on the chess pieces displayed on your screen.</p>"
+                + "<br>"
+                + "<p>The game involves several unique pieces, each with distinct movement capabilities:</p>"
+                + "<table border=\"1\">"
+                + "<tr>"
+                + "<td><b>The Point piece:</b> This piece can advance one or two steps forward. <br>Once it reaches the board's end, it reverses direction. </td>"
+                + "</tr>"
+                + "<tr>"
+                + "<td><b>The Hourglass piece:</b> This piece moves in an L shape, spanning three steps<br>forward and two steps to the side in any direction.</td>"
+                + "</tr>"
+                + "<tr>"
+                + "<td><b>The Time piece:</b> This piece can move diagonally across any number of squares.</td>"
+                + "</tr>"
+                + "<tr>"
+                + "<td><b>The Plus piece:</b> This piece can traverse any distance horizontally or vertically.</td>"
+                + "</tr>"
+                + "<tr>"
+                + "<td><b>The Sun piece:</b> This piece can move one step in any direction.</td>"
+                + "</tr>"
+                + "</table>"
+                + "<p>All the pieces are not allowed to skip over other pieces except for The Hourglass."
+                + "<br><br>"
+                + "<p>Another intriguing aspect of Talabia Chess is the transformation of pieces.<br>After every two turns (considering a turn as one move by each player), all Time pieces<br>transform into Plus pieces, and all Plus pieces become Time pieces.<br>This dynamic element adds an extra layer of strategy to the game.</p>"
+                + "<br>"
+                + "<p>The game ends when one of The Sun is captured by opponent.</p>"
+                + "<br>"
+                + "<p>Good luck and have fun!</p>"
+                + "</body>"
+                + "</html>";
+
+        JLabel label = new JLabel(guideMessage);
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
+
+        // Create a JScrollPane and add the JLabel to it
+        JScrollPane scrollPane = new JScrollPane(label);
+
+        dialog.getContentPane().add(scrollPane);
+        dialog.setSize(new Dimension(550, 450)); // Set the size of the dialog
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }
+
+    // Display pop window that includes simple description
+    public void showAbout() {
+        JOptionPane.showMessageDialog(this,
+                "Talabia Chess, created by group Nauru\nTan Hong Han\nLim Kian Zee\nLam Zi Foong\nChai Di Sheng\nTan Yi Kai\nVersion 1.0");
+    }
 }

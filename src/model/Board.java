@@ -1,5 +1,7 @@
 package model;
 
+import pieces.*;
+
 public class Board implements BoardCallback {
     private Piece[][] pieces;
     private static final int BOARD_ROW = 6;
@@ -101,7 +103,7 @@ public class Board implements BoardCallback {
                     System.out.print(" ");
                 } else {
                     // System.out.print(String.format("%12s", pieces[i][j].toString()));
-                    if (pieces[r][c].getColor() == Color.YELLOW) {
+                    if (pieces[r][c].getColor() == PlayerColor.YELLOW) {
                         System.out.print("y");
                     } else {
                         System.out.print("b");

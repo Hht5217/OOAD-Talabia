@@ -1,9 +1,10 @@
-package model;
+package pieces;
 
 import java.util.List;
+import model.*;
 
 public class Sun extends Piece {
-    public Sun(String id, int yPos, int xPos, Color color, BoardCallback pieceBoard) {
+    public Sun(String id, int yPos, int xPos, PlayerColor color, BoardCallback pieceBoard) {
         super(id, yPos, xPos, color, pieceBoard);
     }
 

@@ -1,5 +1,7 @@
 package model;
 
+import pieces.*;
+
 public interface BoardCallback {
     boolean isEmptySpace(int yPos, int xPos);
 
