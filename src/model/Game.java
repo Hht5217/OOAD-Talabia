@@ -12,7 +12,7 @@ public class Game {
     // private ArrayList<Piece> player2Pieces;
     private Board gameBoard;
     private int moveCount = 0;
-    private PlayerColor currentPlayer = PlayerColor.BLUE;
+    private PlayerColor currentPlayer = PlayerColor.YELLOW;
     private List<GameObserver> observers = new ArrayList<>();
 
     public Game() {
