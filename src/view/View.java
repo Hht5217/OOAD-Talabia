@@ -12,23 +12,21 @@ import model.*;
 public class View extends JFrame {
     private static final int ROWS = 6;
     private static final int COLUMN = 7;
-    private Map<String, JMenuItem> menuItems = new HashMap<>();
-    // private JPanel menuScreen; // to be implement
+    private Map<String, JButton> menuButtons = new HashMap<>();
+    private Map<String, JMenuItem> menuBarItems = new HashMap<>();
+    private JPanel menuScreen; // to be implement
     private JPanel gameScreen;
+    private JMenuBar gameMenuBar;
     private JLabel playerLabel;
     private JLabel moveCountLabel;
     private JButton[][] chessButtons = new JButton[ROWS][COLUMN];
 
+    private boolean isGameScreen = false;
+    private CardLayout cardLayout = new CardLayout();
+    private JPanel screens = new JPanel(cardLayout);
+
     public View() {
         super("Talabia");
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                askSaveGame();
-                System.exit(0);
-            }
-        });
         setSize(new Dimension(700, 600));
 
         /*
@@ -47,6 +45,7 @@ public class View extends JFrame {
                 chessButton.setSize(buttonSize);
                 chessButton.setText(null); // comment out if need to test
                 chessButton.setBackground(Color.WHITE);
+                chessButton.setFocusable(false);
                 chessButtons[r][c] = chessButton;
             }
         }
@@ -55,6 +54,17 @@ public class View extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createGUI();
+                setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        if (isGameScreen) {
+                            askSaveGame(); // The close window button only ask to save game if game screen is being
+                                           // displayed
+                        }
+                        System.exit(0);
+                    }
+                });
                 setLocationRelativeTo(null);
                 setVisible(true);
             }
@@ -63,9 +73,67 @@ public class View extends JFrame {
 
     // Method to create GUI components
     private void createGUI() {
+        // Add the screens to cardlayout screen holder after creating them
+        screens.add(createGameScreen(), "GameScreen");
+        screens.add(createMenuScreen(), "MenuScreen");
+
+        // Create menu bar but no need to show first
+        gameMenuBar = createMenu();
+        // setJMenuBar(gameMenuBar);
+
+        // Initially show the menu screen
+        cardLayout.show(screens, "MenuScreen");
+
+        // Add screens to the JFrame
+        add(screens);
+    }
+
+    // Create and return menu screen
+    private JPanel createMenuScreen() {
+        menuScreen = new JPanel();
+        menuScreen.setLayout(new BoxLayout(menuScreen, BoxLayout.Y_AXIS));
+
+        JLabel titleLabel = new JLabel("Talabia Chess");
+        titleLabel.setFont(new Font("Serif", Font.BOLD, 32)); // Set font size to 32
+        titleLabel.setAlignmentX(CENTER_ALIGNMENT);
+
+        // Create the buttons
+        JButton newGameButton = new JButton("New Game");
+        newGameButton.setBackground(Color.decode("#F7DE8B"));
+        newGameButton.setAlignmentX(CENTER_ALIGNMENT);
+        menuButtons.put("Menu New", newGameButton);
+
+        JButton loadGameButton = new JButton("Load Game");
+        loadGameButton.setBackground(Color.decode("#F7DE8B"));
+        loadGameButton.setAlignmentX(CENTER_ALIGNMENT);
+        menuButtons.put("Menu Load", loadGameButton);
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBackground(Color.decode("#F7DE8B"));
+        exitButton.setAlignmentX(CENTER_ALIGNMENT);
+        menuButtons.put("Menu Exit", exitButton);
+
+        // Add some vertical space between the components
+        int verticalSpace = 10;
+
+        // Add the components to the panel
+        menuScreen.add(Box.createVerticalGlue());
+        menuScreen.add(titleLabel);
+        menuScreen.add(Box.createVerticalStrut(verticalSpace));
+        menuScreen.add(newGameButton);
+        menuScreen.add(Box.createVerticalStrut(verticalSpace));
+        menuScreen.add(loadGameButton);
+        menuScreen.add(Box.createVerticalStrut(verticalSpace));
+        menuScreen.add(exitButton);
+        menuScreen.add(Box.createVerticalGlue());
+
+        return menuScreen;
+    }
+
+    // Create and return game screen
+    private JPanel createGameScreen() {
         gameScreen = new JPanel();
         gameScreen.setLayout(new BorderLayout());
-
         /**
          * currently using borderlayout for statPanel, if more labels will be added then
          * consider using flowlayout
@@ -88,9 +156,7 @@ public class View extends JFrame {
             }
         }
 
-        add(gameScreen);
-        JMenuBar gameMenuBar = createMenu();
-        setJMenuBar(gameMenuBar);
+        return gameScreen;
     }
 
     /*
@@ -130,20 +196,44 @@ public class View extends JFrame {
         menuBar.add(helpDropdwon);
 
         // Add every menu items to Map for adding listener use
-        menuItems.put("New", newGameItem);
-        menuItems.put("Load", loadGameItem);
-        menuItems.put("Save", saveGameItem);
-        menuItems.put("Main Menu", mainMenuItem);
-        menuItems.put("Guide", guideItem);
-        menuItems.put("About", aboutItem);
-        menuItems.put("Exit", exitItem);
+        menuBarItems.put("New", newGameItem);
+        menuBarItems.put("Load", loadGameItem);
+        menuBarItems.put("Save", saveGameItem);
+        menuBarItems.put("Main Menu", mainMenuItem);
+        menuBarItems.put("Guide", guideItem);
+        menuBarItems.put("About", aboutItem);
+        menuBarItems.put("Exit", exitItem);
 
         return menuBar;
     }
 
+    public void switchToMenuScreen() {
+        cardLayout.show(screens, "MenuScreen");
+        isGameScreen = false;
+        // Hide the menu bar when switching to the menu screen
+        setJMenuBar(null);
+    }
+
+    public void switchToGameScreen() {
+        cardLayout.show(screens, "GameScreen");
+        isGameScreen = true;
+        // Show the menu bar when switching to the game screen
+        setJMenuBar(gameMenuBar);
+    }
+
+    // Get the boolean to see if the current screen displayed is game screen
+    public boolean isGameScreenDisplayed() {
+        return isGameScreen;
+    }
+
+    // Get specific main menu button from the map using the key (the name)
+    public JButton getMainMenuButton(String key) {
+        return menuButtons.get(key);
+    }
+
     // Get specific menu item from the map using the key (the name)
-    public JMenuItem getMenuItem(String key) {
-        return menuItems.get(key);
+    public JMenuItem getMenuBarItem(String key) {
+        return menuBarItems.get(key);
     }
 
     // (alternative to above)
@@ -155,7 +245,8 @@ public class View extends JFrame {
         int buttonHeight = buttonToSet.getHeight();
         if (imageUrl != null) {
             Image image = new ImageIcon(imageUrl).getImage();
-            ImageIcon icon = new ImageIcon(image.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH));
+            ImageIcon icon = new ImageIcon(
+                    image.getScaledInstance((buttonWidth * 8 / 10), (buttonHeight * 8 / 10), Image.SCALE_SMOOTH));
             icon.setDescription(imageName);
             // System.out.println(icon.getDescription()); // test
             buttonToSet.setIcon(icon);

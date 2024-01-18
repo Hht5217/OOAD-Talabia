@@ -7,7 +7,7 @@ import view.*;
 import java.awt.*;
 import javax.swing.*;
 
-public class Controller implements GameObserver {
+public class GameController implements GameObserver {
     private Game game;
     private View view;
     private Board board;
@@ -15,7 +15,7 @@ public class Controller implements GameObserver {
     private Piece lastSelectPiece = null;
     private boolean isGameOver = false;
 
-    public Controller(Game talabiaGame, View talabiaView) {
+    public GameController(Game talabiaGame, View talabiaView) {
         this.game = talabiaGame;
         this.view = talabiaView;
         view.setStatLabels(game.getPlayer(), game.getMoveCount());
@@ -66,7 +66,7 @@ public class Controller implements GameObserver {
     // Select piece action
     private void selectPiece(JButton button, Piece piece) {
         piece.setSelected(true);
-        view.setButtonBackgroundColor(button, Color.BLUE);
+        view.setButtonBackgroundColor(button, Color.CYAN);
         view.setAvailableMovesColor(piece.getAvailableMoves(), Color.GREEN);
         lastSelectPiece = piece;
         lastSelectButton = button;
@@ -88,7 +88,7 @@ public class Controller implements GameObserver {
         game.movePiece(movingPiece, movePos);
         game.setPlayer();
         game.setMoveCount();
-        if (game.checkTransformation()) {
+        if (game.checkTransformation() && !isGameOver) { // in case game over then no need to transform
             game.allowTransformation();
             view.transformImage();
         }
@@ -129,8 +129,14 @@ public class Controller implements GameObserver {
     }
 
     @Override
-    public void onSetGame() {
+    public void onNewGame() {
         // get the model and update view accordingly
-        System.out.println("Observer: notified set game"); // test
+        System.out.println("Observer: notified new game"); // test
+    }
+
+    @Override
+    public void onLoadGame() {
+        // get the model and update view accordingly
+        System.out.println("Observer: notified load game"); // test
     }
 }

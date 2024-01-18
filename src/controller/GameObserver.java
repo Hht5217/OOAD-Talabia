@@ -3,5 +3,7 @@ package controller;
 public interface GameObserver {
     void onGameOver();
 
-    void onSetGame();
+    void onNewGame();
+
+    void onLoadGame();
 }

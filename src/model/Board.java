@@ -21,7 +21,7 @@ public class Board implements BoardCallback {
     }
 
     // Add chess piece to board
-    public void addPiece(Piece pieceToAdd) {
+    public void boardAddPiece(Piece pieceToAdd) {
         int addY = pieceToAdd.getYPos();
         int addX = pieceToAdd.getXPos();
         pieces[addY][addX] = pieceToAdd;

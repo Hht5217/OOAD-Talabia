@@ -17,8 +17,12 @@ public class Game {
 
     public Game() {
         gameBoard = new Board();
-        // player1Pieces = new ArrayList<Piece>();
-        // player2Pieces = new ArrayList<Piece>();
+        addPieces();
+        // Test purpose
+        gameBoard.printBoard(); // test
+    }
+
+    private void addPieces() { // can be reused if start new game
         addYPoint();
         addBPoint();
         addYPlus();
@@ -29,89 +33,76 @@ public class Game {
         addBTime();
         addYSun();
         addBSun();
-
-        // Test purpose
-        gameBoard.printBoard(); // test
     }
 
     ///////////////////// Add pieces /////////////////////
-    public void addYPoint() {
+    private void addYPoint() {
         for (int i = 0; i < 7; i++) {
             Piece points = new Point(Integer.toString(i + 1), 4, i, PlayerColor.YELLOW, "NORTH", gameBoard);
-            gameBoard.addPiece(points);
-            // player2Pieces.add(points);
+            gameBoard.boardAddPiece(points);
         }
     }
 
-    public void addBPoint() {
+    private void addBPoint() {
         for (int i = 0; i < 7; i++) {
             Piece points = new Point(Integer.toString(i + 1), 1, i, PlayerColor.BLUE, "SOUTH", gameBoard);
-            gameBoard.addPiece(points);
-            // player1Pieces.add(points);
+            gameBoard.boardAddPiece(points);
         }
     }
 
-    public void addYPlus() {
+    private void addYPlus() {
         Piece plus1 = new Plus("8", 5, 0, PlayerColor.YELLOW, gameBoard);
         Piece plus2 = new Plus("9", 5, 6, PlayerColor.YELLOW, gameBoard);
-        gameBoard.addPiece(plus1);
-        gameBoard.addPiece(plus2);
-        // player2Pieces.add(plus1);
+        gameBoard.boardAddPiece(plus1);
+        gameBoard.boardAddPiece(plus2);
     }
 
-    public void addBPlus() {
+    private void addBPlus() {
         Piece plus1 = new Plus("8", 0, 0, PlayerColor.BLUE, gameBoard);
         Piece plus2 = new Plus("9", 0, 6, PlayerColor.BLUE, gameBoard);
-        gameBoard.addPiece(plus1);
-        gameBoard.addPiece(plus2);
-        // player1Pieces.add(points);
+        gameBoard.boardAddPiece(plus1);
+        gameBoard.boardAddPiece(plus2);
     }
 
-    public void addYHourglass() {
+    private void addYHourglass() {
         Piece hourglass1 = new HourGlass("10", 5, 1, PlayerColor.YELLOW, gameBoard);
         Piece hourglass2 = new HourGlass("11", 5, 5, PlayerColor.YELLOW, gameBoard);
-        gameBoard.addPiece(hourglass1);
-        gameBoard.addPiece(hourglass2);
-        // player2Pieces.add(points);
+        gameBoard.boardAddPiece(hourglass1);
+        gameBoard.boardAddPiece(hourglass2);
     }
 
-    public void addBHourglass() {
+    private void addBHourglass() {
         Piece hourglass1 = new HourGlass("10", 0, 1, PlayerColor.BLUE, gameBoard);
         Piece hourglass2 = new HourGlass("11", 0, 5, PlayerColor.BLUE, gameBoard);
-        gameBoard.addPiece(hourglass1);
-        gameBoard.addPiece(hourglass2);
-        // player1Pieces.add(points);
+        gameBoard.boardAddPiece(hourglass1);
+        gameBoard.boardAddPiece(hourglass2);
     }
 
-    public void addYTime() {
+    private void addYTime() {
         Piece time1 = new Time("12", 5, 2, PlayerColor.YELLOW, gameBoard);
         Piece time2 = new Time("13", 5, 4, PlayerColor.YELLOW, gameBoard);
-        gameBoard.addPiece(time1);
-        gameBoard.addPiece(time2);
-        // player2Pieces.add(points);
+        gameBoard.boardAddPiece(time1);
+        gameBoard.boardAddPiece(time2);
     }
 
-    public void addBTime() {
+    private void addBTime() {
         Piece time1 = new Time("12", 0, 2, PlayerColor.BLUE, gameBoard);
         Piece time2 = new Time("13", 0, 4, PlayerColor.BLUE, gameBoard);
-        gameBoard.addPiece(time1);
-        gameBoard.addPiece(time2);
-        // player1Pieces.add(points);
+        gameBoard.boardAddPiece(time1);
+        gameBoard.boardAddPiece(time2);
     }
 
-    public void addYSun() {
+    private void addYSun() {
         Piece sun = new Sun("14", 5, 3, PlayerColor.YELLOW, gameBoard);
-        gameBoard.addPiece(sun);
-        // player2Pieces.add(points);
+        gameBoard.boardAddPiece(sun);
     }
 
-    public void addBSun() {
+    private void addBSun() {
         Piece sun = new Sun("14", 0, 3, PlayerColor.BLUE, gameBoard);
-        gameBoard.addPiece(sun);
-        // player1Pieces.add(points);
+        gameBoard.boardAddPiece(sun);
     }
 
-    ///////////////////// Other methods /////////////////////
+    ///////////////////// Other methods (remember to arrange) /////////////////////
 
     // Register observer
     public void addObserver(GameObserver observer) {
@@ -130,10 +121,17 @@ public class Game {
         }
     }
 
-    // Notify observers when a new / existing game is set
+    // Notify observers when a new game is set
     private void notifySetGame() { // implement in menu controller
         for (GameObserver observer : observers) {
-            observer.onSetGame();
+            observer.onNewGame();
+        }
+    }
+
+    // Notify observers when an existing game is loaded
+    private void notifyLoadGame() { // implement in menu controller
+        for (GameObserver observer : observers) {
+            observer.onLoadGame();
         }
     }
 
@@ -194,8 +192,14 @@ public class Game {
     }
 
     // Test reset game
-    public void setGame() {
-        System.out.println("Game: Set"); // test
+    public void setNewGame() {
+        System.out.println("Game: Set New"); // test
         notifySetGame();
+    }
+
+    // Test load game
+    public void setLoadGame() {
+        System.out.println("Game: Load"); // test
+        notifyLoadGame();
     }
 }
