@@ -28,7 +28,8 @@ public class View extends JFrame {
     public View() {
         super("Talabia");
         setSize(new Dimension(700, 600));
-
+        // set minimumsize for JFrame
+        setMinimumSize(new java.awt.Dimension(700, 600));
         /*
          * These components are initialized here first so that it is not returned null
          * when controller class is initialized
@@ -82,7 +83,6 @@ public class View extends JFrame {
 
         // Create menu bar but no need to show first
         gameMenuBar = createMenu();
-        // setJMenuBar(gameMenuBar);
 
         // Initially show the menu screen
         cardLayout.show(screens, "MenuScreen");
