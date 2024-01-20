@@ -4,7 +4,7 @@ import java.util.List;
 import model.*;
 
 public class HourGlass extends Piece {
-    public HourGlass(String id, int yPos, int xPos, PlayerColor color, BoardCallback pieceBoard) {
+    public HourGlass(String id, int yPos, int xPos, PlayerColor color, Board pieceBoard) {
         super(id, yPos, xPos, color, pieceBoard);
     }
 

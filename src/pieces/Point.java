@@ -1,15 +1,34 @@
 package pieces;
 
-import java.util.List;
+import java.util.*;
 
+import controller.GameObserver;
 import model.*;
 
 public class Point extends Piece {
-    private String moveDirection;
+    private String moveDirection = ""; // Initialize to avoid errors
+    private List<GameObserver> observers = new ArrayList<>();
 
-    public Point(String id, int yPos, int xPos, PlayerColor color, String moveDirection, BoardCallback pieceBoard) {
+    public Point(String id, int yPos, int xPos, PlayerColor color, String moveDirection, Board pieceBoard) {
         super(id, yPos, xPos, color, pieceBoard);
         this.moveDirection = moveDirection;
+    }
+
+    /* Add observer to observe Point's state */
+    public void addPointObserver(GameObserver observer) {
+        observers.add(observer);
+    }
+
+    /* Remove observer from observers list */
+    public void removePointObserver(GameObserver observer) {
+        observers.remove(observer);
+    }
+
+    /* Notify observer when point changes */
+    private void notifyDirectionChange() {
+        for (GameObserver observer : observers) {
+            observer.onDirectionChange(getYPos(), getXPos(), toString(), getDirection());
+        }
     }
 
     // Check if piece is allowed to move, add if allowed and do nothing if not
@@ -50,10 +69,17 @@ public class Point extends Piece {
         // Check if the piece is at the north border and facing NORTH
         if (getYPos() == 0 && "NORTH".equals(moveDirection)) {
             moveDirection = "SOUTH";
+            notifyDirectionChange();
         }
         // Check if the piece is at the south border and facing SOUTH
         else if (getYPos() == pieceBoard.getBoardRow() - 1 && "SOUTH".equals(moveDirection)) {
             moveDirection = "NORTH";
+            notifyDirectionChange();
         }
+    }
+
+    /* Return the moving direction */
+    public String getDirection() {
+        return moveDirection;
     }
 }

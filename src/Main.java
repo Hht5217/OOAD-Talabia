@@ -7,7 +7,7 @@ public class Main {
         Game g = new Game(); // One of model
         View v = new View(); // View display the model in GUI
         GameController controller = new GameController(g, v); // updates view after getting data from model
+        MenuController menuController = new MenuController(g, v); // used for initializing menu components
         controller.initController();
-        MenuController menuController = new MenuController(g, v);
     }
 }

@@ -4,14 +4,17 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 
 import model.*;
+import pieces.*;
 import view.*;
 
 public class MenuController {
     private Game game;
     private View view;
+    private Board board;
 
     public MenuController(Game talabiaGame, View talabiaView) {
         this.game = talabiaGame;
+        this.board = game.getGameBoard();
         this.view = talabiaView;
         initMenuButtons();
         initMenuItems();
@@ -51,22 +54,33 @@ public class MenuController {
         aboutItem.addActionListener(e -> about());
     }
 
-    // private void menuNewGame() {
-    // view.switchToGameScreen();
-    // }
-
-    // private void menuLoadGame() {
-    // view.switchToGameScreen();
-    // // add load game logic and game.setgame
-    // }
-
+    // Perform this action when new game button or menu item is clicked
     private void newGame() {
         if (view.isGameScreenDisplayed()) {
             view.askSaveGame();
-            game.setNewGame();
-        } else {
+        }
+        game.setNewGame();
+        view.setStatLabels(game.getPlayer(), game.getMoveCount());
+        view.clearButtonsImages();
+        for (int r = 0; r < 6; r++) {
+            for (int c = 0; c < 7; c++) {
+                JButton button = view.getButton(r, c);
+                Piece piece = board.getPiece(r, c);
+                if (piece != null) {
+                    // If piece is Point call the version with direction param
+                    if (piece instanceof Point) {
+                        // Cast the Piece to a Point to get the direction
+                        Point point = (Point) piece;
+                        view.setPointImage(button, point.toString(), point.getDirection());
+                    } else {
+                        // For non-Point pieces, call the other version of setPieceImage
+                        view.setPieceImage(button, piece.toString());
+                    }
+                }
+            }
+        }
+        if (!view.isGameScreenDisplayed()) {
             view.switchToGameScreen();
-            // probably also add set game in case user back to menu then new game again
         }
     }
 
@@ -85,7 +99,6 @@ public class MenuController {
 
     private void mainMenu() {
         view.askSaveGame();
-        // System.out.println("Mainmenu"); // test
         view.switchToMenuScreen();
     }
 
@@ -93,20 +106,14 @@ public class MenuController {
         if (view.isGameScreenDisplayed()) {
             view.askSaveGame();
         }
-        System.out.println("Exit"); // test
-        // exit game
-        System.exit(0);
+        System.exit(0); // Exit the program
     }
 
     private void guide() {
-        System.out.println("How to play"); // test
-        // add pop up window and display simple rules and pieces movement
         view.showGuide();
     }
 
     private void about() {
-        System.out.println("About"); // test
-        // show simple info about program creators
         view.showAbout();
     }
 }

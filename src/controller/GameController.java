@@ -13,7 +13,6 @@ public class GameController implements GameObserver {
     private Board board;
     private JButton lastSelectButton = null;
     private Piece lastSelectPiece = null;
-    private boolean isGameOver = false;
 
     public GameController(Game talabiaGame, View talabiaView) {
         this.game = talabiaGame;
@@ -25,26 +24,20 @@ public class GameController implements GameObserver {
 
     // Initialize controller
     public void initController() {
-        // JButton[][] initButtons = view.getChessButtons();
         for (int r = 0; r < 6; r++) {
             for (int c = 0; c < 7; c++) {
                 JButton button = view.getButton(r, c);
-                Piece piece = board.getPiece(r, c);
-                if (piece != null) {
-                    view.setPieceImage(button, piece.toString());
-                }
-                button.addActionListener(e -> mouseAction(button, board.getBoard()));
+                button.addActionListener(e -> mouseAction(button));
             }
         }
     }
 
     // Almost all action are done by mouse action
-    private void mouseAction(JButton selectedButton, Piece[][] gameBoard) {
-        if (isGameOver) { // if game over is true the method stops at here, as it returns nothing
+    private void mouseAction(JButton selectedButton) {
+        if (game.checkGameOver()) { // if game over is true the method stops at here, as it returns nothing
             return;
         }
-        Piece selectedPiece = matchPieceButton(selectedButton, gameBoard);
-        System.out.println("Current: " + selectedButton.getName()); // test
+        Piece selectedPiece = matchPieceButton(selectedButton);
         if (selectedPiece != null && selectedPiece.getColor() == game.getPlayer()) {
             if (selectedButton == lastSelectButton) {
                 deselectPiece(lastSelectButton, lastSelectPiece);
@@ -58,8 +51,6 @@ public class GameController implements GameObserver {
             view.setAvailableMovesColor(lastSelectPiece.getAvailableMoves(), Color.WHITE);
             moveSelected(lastSelectButton, selectedButton, lastSelectPiece);
             deselectPiece(lastSelectButton, lastSelectPiece);
-            System.out.println("Moved\n*******************************"); // test
-            board.printBoard();
         }
     }
 
@@ -88,7 +79,7 @@ public class GameController implements GameObserver {
         game.movePiece(movingPiece, movePos);
         game.setPlayer();
         game.setMoveCount();
-        if (game.checkTransformation() && !isGameOver) { // in case game over then no need to transform
+        if (game.checkTransformation() && !game.checkGameOver()) { // in case game over then no need to transform
             game.allowTransformation();
             view.transformImage();
         }
@@ -110,12 +101,12 @@ public class GameController implements GameObserver {
     }
 
     // Get piece matching to button
-    public Piece matchPieceButton(JButton buttonSelected, Piece[][] gameBoard) {
+    public Piece matchPieceButton(JButton buttonSelected) {
         String buttonName = buttonSelected.getName();
         String[] namePos = buttonName.split("r|c"); // split the string on 'r' and 'c'
         int r = Integer.parseInt(namePos[1]);
         int c = Integer.parseInt(namePos[2]);
-        return gameBoard[r][c];
+        return board.getPiece(r, c);
     }
 
     /*
@@ -124,19 +115,25 @@ public class GameController implements GameObserver {
      */
     @Override
     public void onGameOver() {
-        isGameOver = true;
+        game.setGameOver(true);
         view.displayGameOver(game.getPlayer().toString());
     }
 
     @Override
     public void onNewGame() {
-        // get the model and update view accordingly
-        System.out.println("Observer: notified new game"); // test
+        game.setGameOver(false); // Reset game over to false
+        game.addPointsObserver(this); // Readd observer to newly created pieces
     }
 
     @Override
     public void onLoadGame() {
         // get the model and update view accordingly
         System.out.println("Observer: notified load game"); // test
+    }
+
+    @Override
+    public void onDirectionChange(int yPos, int xPos, String pieceName, String direction) {
+        JButton button = view.getButton(yPos, xPos);
+        view.setPointImage(button, pieceName, direction);
     }
 }

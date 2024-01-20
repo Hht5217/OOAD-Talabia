@@ -35,6 +35,7 @@ public class View extends JFrame {
          */
         playerLabel = new JLabel("Current player:");
         moveCountLabel = new JLabel("Move Count:");
+
         // Adds empty button for the chess board
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMN; c++) {
@@ -49,6 +50,8 @@ public class View extends JFrame {
                 chessButtons[r][c] = chessButton;
             }
         }
+
+        gameMenuBar = createMenu();
 
         // add explanation
         SwingUtilities.invokeLater(new Runnable() {
@@ -236,22 +239,49 @@ public class View extends JFrame {
         return menuBarItems.get(key);
     }
 
-    // (alternative to above)
+    // Set images to buttons according to pieces' name
     public void setPieceImage(JButton buttonToSet, String pieceName) {
-        String imageName = (pieceName.replaceAll("[0-9]", "")) + ".png";
+        String imageName = (pieceName.replaceAll("[0-9]", "")) + ".png"; // remove all digits from pieceName
+        setImage(buttonToSet, imageName);
+    }
+
+    /**
+     * Used for setting image for Point pieces
+     * 
+     * @param buttonToSet the button that image will be updated
+     * @param pieceName   the name of the piece, specifically Point piece
+     * @param direction   the direction of the piece and also the direction of the
+     *                    image to be set
+     */
+    public void setPointImage(JButton buttonToSet, String pieceName, String direction) {
+        String nameWithoutID = pieceName.replaceAll("[0-9]", "");
+        String imageName = (direction.equals("NORTH")) ? nameWithoutID + "N.png" : nameWithoutID + "S.png";
+        setImage(buttonToSet, imageName);
+    }
+
+    /* The general set image method */
+    private void setImage(JButton button, String imageName) {
         URL imageUrl = getClass().getClassLoader().getResource(imageName);
 
-        int buttonWidth = buttonToSet.getWidth();
-        int buttonHeight = buttonToSet.getHeight();
+        int buttonWidth = button.getWidth();
+        int buttonHeight = button.getHeight();
         if (imageUrl != null) {
             Image image = new ImageIcon(imageUrl).getImage();
             ImageIcon icon = new ImageIcon(
                     image.getScaledInstance((buttonWidth * 8 / 10), (buttonHeight * 8 / 10), Image.SCALE_SMOOTH));
             icon.setDescription(imageName);
-            // System.out.println(icon.getDescription()); // test
-            buttonToSet.setIcon(icon);
+            button.setIcon(icon);
         } else {
-            System.out.println("Image not found: " + pieceName);
+            System.out.println("Image not found: " + imageName);
+        }
+    }
+
+    // Clear all images from buttons before setting them again, for set new game use
+    public void clearButtonsImages() {
+        for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c < COLUMN; c++) {
+                chessButtons[r][c].setIcon(null);
+            }
         }
     }
 
@@ -263,7 +293,6 @@ public class View extends JFrame {
     // Highlight or hide available moves and the buttons related
     public void setAvailableMovesColor(java.util.List<Move> availableMoves, Color color) {
         for (Move moves : availableMoves) {
-            // System.out.println("Move:" + moves.toString()); // test
             chessButtons[moves.getMoveRow()][moves.getMoveColumn()].setBackground(color);
         }
     }
@@ -275,7 +304,13 @@ public class View extends JFrame {
         originalButton.setIcon(null);
     }
 
-    // Get image from original button and update the new button with it
+    /**
+     * First iterate through the chess buttons array to check if there is any icon.
+     * If yes then check the description of the icon, in this case description has
+     * been set as piece name .png beforehand. If the icon description is equal to
+     * the pieces that will transform, then insert new image name (the name of image
+     * that will be updated), then use set piece image method to update the icon.
+     */
     public void transformImage() {
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMN; c++) {
@@ -298,14 +333,11 @@ public class View extends JFrame {
                 }
             }
         }
-        System.out.println("Transform image"); // test
     }
 
     // Update labels
     public void setStatLabels(PlayerColor player, int moveCount) {
-        /**
-         * space at the end to prevent text sticking to window
-         */
+        // Space at the end to prevent text sticking to window
         moveCountLabel.setText("Move Count: " + Integer.toString(moveCount) + " ");
 
         String currentPlayer = (player == PlayerColor.YELLOW) ? "YELLOW" : "BLUE";
@@ -317,12 +349,17 @@ public class View extends JFrame {
         return chessButtons[row][col];
     }
 
-    // Get the button
+    /*
+     * ^- These two are different, one is get button from position and one is get
+     * position from button -v
+     */
+
+    // Get the button's position
     public Move getButtonPosition(JButton button) {
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMN; c++) {
                 if (chessButtons[r][c] == button) {
-                    return new Move(r, c); // return the position as move object
+                    return new Move(r, c); // return the position as move object (pair of integers)
                 }
             }
         }

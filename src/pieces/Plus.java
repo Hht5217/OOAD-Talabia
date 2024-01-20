@@ -4,7 +4,7 @@ import java.util.List;
 import model.*;
 
 public class Plus extends Piece {
-    public Plus(String id, int yPos, int xPos, PlayerColor color, BoardCallback pieceBoard) {
+    public Plus(String id, int yPos, int xPos, PlayerColor color, Board pieceBoard) {
         super(id, yPos, xPos, color, pieceBoard);
     }
 

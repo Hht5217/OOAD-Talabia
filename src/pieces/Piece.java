@@ -10,11 +10,11 @@ public abstract class Piece {
     protected int xPos;
     protected int yPos;
     protected PlayerColor color;
-    protected BoardCallback pieceBoard;
+    protected Board pieceBoard;
     protected boolean selected = false;
     protected List<Move> movePos = new ArrayList<>();
 
-    public Piece(String id, int yPos, int xPos, PlayerColor color, BoardCallback pieceBoard) {
+    public Piece(String id, int yPos, int xPos, PlayerColor color, Board pieceBoard) {
         this.id = id;
         if (color == PlayerColor.YELLOW) {
             this.pieceName = "y" + getType() + id;
