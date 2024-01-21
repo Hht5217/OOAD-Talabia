@@ -10,26 +10,35 @@ import javax.swing.*;
 import model.*;
 
 public class View extends JFrame {
+    // For this program the width / row and height column remains the same
     private static final int ROWS = 6;
     private static final int COLUMN = 7;
-    private Map<String, JButton> menuButtons = new HashMap<>();
-    private Map<String, JMenuItem> menuBarItems = new HashMap<>();
-    private JPanel menuScreen; // to be implement
-    private JPanel gameScreen;
-    private JMenuBar gameMenuBar;
-    private JLabel playerLabel;
-    private JLabel moveCountLabel;
-    private JButton[][] chessButtons = new JButton[ROWS][COLUMN];
 
-    private boolean isGameScreen = false;
-    private CardLayout cardLayout = new CardLayout();
-    private JPanel screens = new JPanel(cardLayout);
+    // Maps of components that needs to add action listeners
+    private Map<String, JButton> menuButtons = new HashMap<>(); // Store the buttons on first screen
+    private Map<String, JMenuItem> menuBarItems = new HashMap<>(); // Store menu bar components
+
+    // Screens/view of the program
+    private JPanel menuScreen; // The first screen when program starts
+    private JPanel gameScreen; // The screen when game is running
+    private boolean isGameScreen = false; // To check whether to switch to game screen
+
+    // Essential components for the program
+    private JMenuBar gameMenuBar; // The navigation bar
+    private JLabel playerLabel; // The text below the navigation bar
+    private JLabel moveCountLabel; // Same as above
+    private JButton[][] chessButtons = new JButton[ROWS][COLUMN]; // The 2d array to store buttons
+    private CardLayout cardLayout = new CardLayout(); // The cardlayout, used to switch screens
+    private JPanel screens = new JPanel(cardLayout); // A holder for the screens that uses cardlayout
+
+    private int buttonWidth;
+    private int buttonHeight;
 
     public View() {
-        super("Talabia");
-        setSize(new Dimension(700, 600));
-        // set minimumsize for JFrame
-        setMinimumSize(new java.awt.Dimension(700, 600));
+        super("Talabia"); // Title of the program
+        setSize(new Dimension(700, 600)); // The size when program starts
+        setMinimumSize(new java.awt.Dimension(700, 600)); // set minimumsize for JFrame
+
         /*
          * These components are initialized here first so that it is not returned null
          * when controller class is initialized
@@ -37,45 +46,62 @@ public class View extends JFrame {
         playerLabel = new JLabel("Current player:");
         moveCountLabel = new JLabel("Move Count:");
 
-        // Adds empty button for the chess board
+        // Add empty buttons to the 2d array
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMN; c++) {
-                String buttonName = ("r" + r + "c" + c);
-                JButton chessButton = new JButton(buttonName); // Set button text
-                chessButton.setName(buttonName);
-                Dimension buttonSize = new Dimension(100, 100);
-                chessButton.setSize(buttonSize);
-                chessButton.setText(null); // comment out if need to test
-                chessButton.setBackground(Color.WHITE);
-                chessButton.setFocusable(false);
-                chessButtons[r][c] = chessButton;
+                String buttonName = ("r" + r + "c" + c); // Create name String for button
+                JButton chessButton = new JButton(); // Create new button
+                chessButton.setName(buttonName); // Set name of button
+                // chessButton.setText(buttonName); // Set text using name, for testing
+                Dimension buttonSize = new Dimension(100, 100); // Define button size
+                chessButton.setSize(buttonSize); // Set button size
+                chessButton.setBackground(Color.WHITE); // Set background of button to WHITE
+                chessButton.setFocusable(false); // To hide the border when button is clicked
+                chessButtons[r][c] = chessButton; // Set the button to specific location in the 2d array
             }
         }
 
+        // test
+        buttonWidth = chessButtons[0][0].getWidth();
+        buttonHeight = chessButtons[0][0].getHeight();
+
+        // Initialize the menu bar, but not showing it first
         gameMenuBar = createMenu();
 
-        // add explanation
+        /*
+         * The invokeLater ensures Swing will execute the creation of GUI in an orderly
+         * fashion, to prevent changes happening all at once
+         */
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                createGUI();
+                createGUI(); // Create GUI components
+
+                /*
+                 * Do nothing when close window is clicked, but implements conditions to do
+                 * something when clicked
+                 */
                 setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 addWindowListener(new WindowAdapter() {
                     @Override
+                    // Close window only asks whether to save game if game screen is being displayed
                     public void windowClosing(WindowEvent e) {
                         if (isGameScreen) {
-                            askSaveGame(); // The close window button only ask to save game if game screen is being
-                                           // displayed
+                            askSaveGame(); // Display the save game pop up
                         }
-                        System.exit(0);
+                        System.exit(0); // Exit the program
                     }
                 });
-                setLocationRelativeTo(null);
-                setVisible(true);
+
+                setLocationRelativeTo(null); // Puts the window in the middle of the screen when it first opens.
+                setVisible(true); // Show the GUI
             }
         });
     }
 
-    // Method to create GUI components
+    /*
+     * The method to create essential GUI components, mostly those that will be used
+     * throughout the program
+     */
     private void createGUI() {
         // Add the screens to cardlayout screen holder after creating them
         screens.add(createGameScreen(), "GameScreen");
@@ -91,38 +117,36 @@ public class View extends JFrame {
         add(screens);
     }
 
-    // Create and return menu screen
+    /* Create and return menu screen */
     private JPanel createMenuScreen() {
-        menuScreen = new JPanel();
-        menuScreen.setLayout(new BoxLayout(menuScreen, BoxLayout.Y_AXIS));
+        menuScreen = new JPanel(); // Initialize the menu screen
+        menuScreen.setLayout(new BoxLayout(menuScreen, BoxLayout.Y_AXIS)); // Set the layout of menu screen
 
-        JLabel titleLabel = new JLabel("Talabia Chess");
+        JLabel titleLabel = new JLabel("Talabia Chess"); // Create a title label
         titleLabel.setFont(new Font("Serif", Font.BOLD, 32)); // Set font size to 32
-        titleLabel.setAlignmentX(CENTER_ALIGNMENT);
+        titleLabel.setAlignmentX(CENTER_ALIGNMENT); // Align vertically at center
 
-        // Create the buttons
-        JButton newGameButton = new JButton("New Game");
-        newGameButton.setBackground(Color.decode("#F7DE8B"));
-        newGameButton.setAlignmentX(CENTER_ALIGNMENT);
-        menuButtons.put("Menu New", newGameButton);
+        JButton newGameButton = new JButton("New Game"); // Create a button for starting new game
+        newGameButton.setBackground(Color.decode("#F7DE8B")); // Set the color, using RGB
+        newGameButton.setAlignmentX(CENTER_ALIGNMENT); // Align vertically at center
+        menuButtons.put("Menu New", newGameButton); // Put this button into the map of components
 
-        JButton loadGameButton = new JButton("Load Game");
-        loadGameButton.setBackground(Color.decode("#F7DE8B"));
+        JButton loadGameButton = new JButton("Load Game"); // Create a button for loading game
+        loadGameButton.setBackground(Color.decode("#F7DE8B")); // Similar to above
         loadGameButton.setAlignmentX(CENTER_ALIGNMENT);
         menuButtons.put("Menu Load", loadGameButton);
 
-        JButton exitButton = new JButton("Exit");
-        exitButton.setBackground(Color.decode("#F7DE8B"));
+        JButton exitButton = new JButton("Exit"); // Create a button for exit program
+        exitButton.setBackground(Color.decode("#F7DE8B")); // Similar to above
         exitButton.setAlignmentX(CENTER_ALIGNMENT);
         menuButtons.put("Menu Exit", exitButton);
 
-        // Add some vertical space between the components
-        int verticalSpace = 10;
+        int verticalSpace = 10; // The size of the vertical space between the components
 
         // Add the components to the panel
         menuScreen.add(Box.createVerticalGlue());
         menuScreen.add(titleLabel);
-        menuScreen.add(Box.createVerticalStrut(verticalSpace));
+        menuScreen.add(Box.createVerticalStrut(verticalSpace)); // Add the space between components
         menuScreen.add(newGameButton);
         menuScreen.add(Box.createVerticalStrut(verticalSpace));
         menuScreen.add(loadGameButton);
@@ -262,9 +286,6 @@ public class View extends JFrame {
     /* The general set image method */
     private void setImage(JButton button, String imageName) {
         URL imageUrl = getClass().getClassLoader().getResource(imageName);
-
-        int buttonWidth = button.getWidth();
-        int buttonHeight = button.getHeight();
         if (imageUrl != null) {
             Image image = new ImageIcon(imageUrl).getImage();
             ImageIcon icon = new ImageIcon(
