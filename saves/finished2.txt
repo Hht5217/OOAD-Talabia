@@ -1,0 +1,26 @@
+// The move count made
+moveCount: 17
+// The player to play a move
+currentPlayer: BLUE
+// Whether the game is over
+isGameOver: true
+// Type, ID, y Position, x Position, Color, direction (for Point)
+piece: Hourglass, 10, 0, 1, BLUE
+piece: Time, 12, 0, 2, BLUE
+piece: Sun, 14, 0, 3, BLUE
+piece: Time, 13, 0, 4, BLUE
+piece: Hourglass, 11, 0, 5, BLUE
+piece: Point, 1, 1, 0, BLUE, SOUTH
+piece: Point, 4, 1, 3, YELLOW, NORTH
+piece: Point, 2, 2, 1, BLUE, SOUTH
+piece: Point, 3, 3, 2, BLUE, SOUTH
+piece: Plus, 8, 3, 3, BLUE
+piece: Point, 5, 3, 4, YELLOW, NORTH
+piece: Hourglass, 11, 3, 6, YELLOW
+piece: Point, 1, 4, 0, YELLOW, NORTH
+piece: Point, 7, 4, 6, YELLOW, NORTH
+piece: Plus, 8, 5, 0, YELLOW
+piece: Hourglass, 10, 5, 1, YELLOW
+piece: Sun, 14, 5, 2, YELLOW
+piece: Time, 13, 5, 4, YELLOW
+piece: Plus, 9, 5, 6, YELLOW

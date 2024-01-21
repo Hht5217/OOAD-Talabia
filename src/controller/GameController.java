@@ -128,6 +128,7 @@ public class GameController implements GameObserver {
     @Override
     public void onLoadGame() {
         // get the model and update view accordingly
+        game.addPointsObserver(this);
         System.out.println("Observer: notified load game"); // test
     }
 

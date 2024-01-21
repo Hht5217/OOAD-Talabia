@@ -3,8 +3,8 @@ package pieces;
 import java.util.List;
 import model.*;
 
-public class HourGlass extends Piece {
-    public HourGlass(String id, int yPos, int xPos, PlayerColor color, Board pieceBoard) {
+public class Hourglass extends Piece {
+    public Hourglass(String id, int yPos, int xPos, PlayerColor color, Board pieceBoard) {
         super(id, yPos, xPos, color, pieceBoard);
     }
 

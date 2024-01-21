@@ -61,7 +61,7 @@ public class View extends JFrame {
             }
         }
 
-        // test
+        // Initialize the button width and height
         buttonWidth = chessButtons[0][0].getWidth();
         buttonHeight = chessButtons[0][0].getHeight();
 
@@ -75,25 +75,29 @@ public class View extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createGUI(); // Create GUI components
-
-                /*
-                 * Do nothing when close window is clicked, but implements conditions to do
-                 * something when clicked
-                 */
-                setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                addWindowListener(new WindowAdapter() {
-                    @Override
-                    // Close window only asks whether to save game if game screen is being displayed
-                    public void windowClosing(WindowEvent e) {
-                        if (isGameScreen) {
-                            askSaveGame(); // Display the save game pop up
-                        }
-                        System.exit(0); // Exit the program
-                    }
-                });
-
                 setLocationRelativeTo(null); // Puts the window in the middle of the screen when it first opens.
                 setVisible(true); // Show the GUI
+            }
+        });
+    }
+
+    /*
+     * Do nothing when close window is clicked, but implements conditions to do
+     * something when clicked, in this case display a window to ask user whether to
+     * save game. The Runnable saveGameActon is to let the menu controller class to
+     * run the saveGame method.
+     */
+    public void setUpCloseWindowHandler(Runnable saveGameAction) {
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (isGameScreen) {
+                    if (askSaveGame()) {
+                        saveGameAction.run();
+                    }
+                }
+                System.exit(0);
             }
         });
     }
@@ -157,7 +161,7 @@ public class View extends JFrame {
         return menuScreen;
     }
 
-    // Create and return game screen
+    /* Create and return game screen */
     private JPanel createGameScreen() {
         gameScreen = new JPanel();
         gameScreen.setLayout(new BorderLayout());
@@ -234,6 +238,7 @@ public class View extends JFrame {
         return menuBar;
     }
 
+    /* Switch to menu screen from the screens holder using cardlayout */
     public void switchToMenuScreen() {
         cardLayout.show(screens, "MenuScreen");
         isGameScreen = false;
@@ -241,6 +246,7 @@ public class View extends JFrame {
         setJMenuBar(null);
     }
 
+    /* Switch to game screen from the screens holder using cardlayout */
     public void switchToGameScreen() {
         cardLayout.show(screens, "GameScreen");
         isGameScreen = true;
@@ -248,24 +254,24 @@ public class View extends JFrame {
         setJMenuBar(gameMenuBar);
     }
 
-    // Get the boolean to see if the current screen displayed is game screen
+    /* Get the boolean to see if the current screen displayed is game screen */
     public boolean isGameScreenDisplayed() {
         return isGameScreen;
     }
 
-    // Get specific main menu button from the map using the key (the name)
+    /* Get specific main menu button from the map using the key (the name) */
     public JButton getMainMenuButton(String key) {
         return menuButtons.get(key);
     }
 
-    // Get specific menu item from the map using the key (the name)
+    /* Get specific menu item from the map using the key (the name) */
     public JMenuItem getMenuBarItem(String key) {
         return menuBarItems.get(key);
     }
 
-    // Set images to buttons according to pieces' name
+    /* Set images to buttons according to pieces' name */
     public void setPieceImage(JButton buttonToSet, String pieceName) {
-        String imageName = (pieceName.replaceAll("[0-9]", "")) + ".png"; // remove all digits from pieceName
+        String imageName = (pieceName.replaceAll("\\d", "")) + ".png"; // Remove all digits from pieceName
         setImage(buttonToSet, imageName);
     }
 
@@ -278,7 +284,7 @@ public class View extends JFrame {
      *                    image to be set
      */
     public void setPointImage(JButton buttonToSet, String pieceName, String direction) {
-        String nameWithoutID = pieceName.replaceAll("[0-9]", "");
+        String nameWithoutID = pieceName.replaceAll("\\d", "");
         String imageName = (direction.equals("NORTH")) ? nameWithoutID + "N.png" : nameWithoutID + "S.png";
         setImage(buttonToSet, imageName);
     }
@@ -297,7 +303,7 @@ public class View extends JFrame {
         }
     }
 
-    // Clear all images from buttons before setting them again, for set new game use
+    /* Clear all buttons' images before setting them again */
     public void clearButtonsImages() {
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMN; c++) {
@@ -306,19 +312,19 @@ public class View extends JFrame {
         }
     }
 
-    // Set background color of a button
+    /* Set background color of a button */
     public void setButtonBackgroundColor(JButton button, Color color) {
         button.setBackground(color);
     }
 
-    // Highlight or hide available moves and the buttons related
+    /* Highlight or hide available moves and the buttons related */
     public void setAvailableMovesColor(java.util.List<Move> availableMoves, Color color) {
         for (Move moves : availableMoves) {
             chessButtons[moves.getMoveRow()][moves.getMoveColumn()].setBackground(color);
         }
     }
 
-    // Move images from one button to another
+    /* Move images from one button to another */
     public void moveButton(JButton originalButton, JButton movingButton) {
         Icon icon = originalButton.getIcon();
         movingButton.setIcon(icon);
@@ -356,16 +362,17 @@ public class View extends JFrame {
         }
     }
 
-    // Update labels
+    /* Set the labels of move count and current player */
     public void setStatLabels(PlayerColor player, int moveCount) {
         // Space at the end to prevent text sticking to window
         moveCountLabel.setText("Move Count: " + Integer.toString(moveCount) + " ");
 
+        // If player is yellow then set yellow, if not then blue
         String currentPlayer = (player == PlayerColor.YELLOW) ? "YELLOW" : "BLUE";
         playerLabel.setText("Current player: " + currentPlayer);
     }
 
-    // Get a specific button from their position
+    /* Get a specific button from their position */
     public JButton getButton(int row, int col) {
         return chessButtons[row][col];
     }
@@ -375,7 +382,7 @@ public class View extends JFrame {
      * position from button -v
      */
 
-    // Get the button's position
+    /* Get the button's position */
     public Move getButtonPosition(JButton button) {
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMN; c++) {
@@ -388,26 +395,24 @@ public class View extends JFrame {
         return null;
     }
 
-    // Display game over message (add parameters to show who won)
+    /* Display game over message (add parameters to show who won) */
     public void displayGameOver(String winner) {
         JOptionPane.showMessageDialog(this, ("Game Over! " + winner + " has won!"), "Talabia",
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // Display pop up to confirm whether to save game
-    public void askSaveGame() {
+    /* Display pop up to confirm whether to save game */
+    public boolean askSaveGame() {
         int option = JOptionPane.showConfirmDialog(this, "Do you want to save the current game?", "Save Game",
                 JOptionPane.YES_NO_OPTION);
         if (option == JOptionPane.YES_OPTION) {
-            System.out.println("Save game: Yes"); // test
-            // Save the game here
-        } else if (option == JOptionPane.NO_OPTION) {
-            System.out.println("Save game: No"); // test
-            // Don't save the game
+            return true;
+        } else {
+            return false;
         }
     }
 
-    // Display window that shows how to play the game
+    /* Display window that shows how to play the game */
     public void showGuide() {
         JDialog dialog = new JDialog(this, "How to Play", true);
 
@@ -453,10 +458,10 @@ public class View extends JFrame {
         dialog.getContentPane().add(scrollPane);
         dialog.setSize(new Dimension(550, 450)); // Set the size of the dialog
         dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
+        dialog.setVisible(true); // Display the pop up
     }
 
-    // Display pop window that includes simple description
+    /* Display pop window that includes simple description */
     public void showAbout() {
         JOptionPane.showMessageDialog(this,
                 "Talabia Chess, created by group Nauru\nTan Hong Han\nLim Kian Zee\nLam Zi Foong\nChai Di Sheng\nTan Yi Kai\nVersion 1.0");

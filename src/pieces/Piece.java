@@ -64,7 +64,7 @@ public abstract class Piece {
     }
 
     // Get chess piece name
-    public String toString() {
+    public String getPieceName() {
         return pieceName;
     }
 

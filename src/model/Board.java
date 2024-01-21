@@ -25,8 +25,21 @@ public class Board {
         }
     }
 
+    /* Remove observers from Points piece */
+    public void boardRemovePointsObserver(GameObserver observer) {
+        for (int r = 0; r < BOARD_ROW; r++) {
+            for (int c = 0; c < BOARD_COL; c++) {
+                Piece piece = pieces[r][c];
+                if (piece instanceof Point) {
+                    Point point = (Point) piece;
+                    point.removePointObserver(observer);
+                }
+            }
+        }
+    }
+
     /* Add chess piece to board */
-    public void boardAddPiece(Piece pieceToAdd) {
+    public void addPiece(Piece pieceToAdd) {
         int addY = pieceToAdd.getYPos();
         int addX = pieceToAdd.getXPos();
         pieces[addY][addX] = pieceToAdd;
@@ -55,10 +68,16 @@ public class Board {
         return false;
     }
 
-    /* Clear the board before setting board from loaded game */
+    /*
+     * Clear the board before setting board from loaded game. If the piece is a
+     * Point, remove all the observers
+     */
     public void clearBoard() {
         for (int r = 0; r < BOARD_ROW; r++) {
             for (int c = 0; c < BOARD_COL; c++) {
+                if (pieces[r][c] instanceof Point) {
+                    ((Point) pieces[r][c]).removeAllPointObserver();
+                }
                 pieces[r][c] = null;
             }
         }
@@ -83,10 +102,7 @@ public class Board {
         }
     }
 
-    /* ---------------------------- Callback methods ---------------------------- */
-    /* ------------------- These will be used by Piece classes ------------------ */
-    // Check if specific location is empty (callback)
-    // @Override
+    // Check if specific location is empty
     public boolean isEmptySpace(int yPos, int xPos) {
         if (pieces[yPos][xPos] == null) {
             return true;
@@ -94,28 +110,29 @@ public class Board {
         return false;
     }
 
-    // Check if the piece is within the board range (callback)
-    // @Override
+    // Check if the piece is within the board range
     public boolean inBoard(int yPos, int xPos) {
         return xPos >= 0 && xPos < getBoardColumn() && yPos >= 0 && yPos < getBoardRow();
     }
 
     // Get length Y (column) of board
-    // @Override
     public int getBoardRow() {
         return BOARD_ROW;
     }
 
     // Get length X (row) of board
-    // @Override
     public int getBoardColumn() {
         return BOARD_COL;
     }
 
-    // Return piece at specific location (callback)
-    // @Override
+    // Return piece at specific location
     public Piece getPiece(int yPos, int xPos) {
         return pieces[yPos][xPos];
+    }
+
+    // Return the whole 2D array that store pieces
+    public Piece[][] getAllPieces() {
+        return pieces;
     }
     /* -------------------------------------------------------------------------- */
 

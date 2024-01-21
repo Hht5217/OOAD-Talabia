@@ -24,10 +24,18 @@ public class Point extends Piece {
         observers.remove(observer);
     }
 
+    // The above method is written to follow standard Observer pattern methods
+    // implementation. In this program only the below is being used currently.
+
+    /* Remove all observers */
+    public void removeAllPointObserver() {
+        observers.clear();
+    }
+
     /* Notify observer when point changes */
     private void notifyDirectionChange() {
         for (GameObserver observer : observers) {
-            observer.onDirectionChange(getYPos(), getXPos(), toString(), getDirection());
+            observer.onDirectionChange(getYPos(), getXPos(), getPieceName(), getDirection());
         }
     }
 

@@ -1,6 +1,10 @@
 package controller;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 
 import model.*;
@@ -16,6 +20,7 @@ public class MenuController {
         this.game = talabiaGame;
         this.board = game.getGameBoard();
         this.view = talabiaView;
+        view.setUpCloseWindowHandler(() -> saveGame());
         initMenuButtons();
         initMenuItems();
     }
@@ -56,8 +61,8 @@ public class MenuController {
 
     // Perform this action when new game button or menu item is clicked
     private void newGame() {
-        if (view.isGameScreenDisplayed()) {
-            view.askSaveGame();
+        if (view.isGameScreenDisplayed() && view.askSaveGame()) {
+            saveGame();
         }
         game.setNewGame();
         view.setStatLabels(game.getPlayer(), game.getMoveCount());
@@ -71,10 +76,10 @@ public class MenuController {
                     if (piece instanceof Point) {
                         // Cast the Piece to a Point to get the direction
                         Point point = (Point) piece;
-                        view.setPointImage(button, point.toString(), point.getDirection());
+                        view.setPointImage(button, point.getPieceName(), point.getDirection());
                     } else {
                         // For non-Point pieces, call the other version of setPieceImage
-                        view.setPieceImage(button, piece.toString());
+                        view.setPieceImage(button, piece.getPieceName());
                     }
                 }
             }
@@ -85,26 +90,88 @@ public class MenuController {
     }
 
     private void loadGame() {
-        if (view.isGameScreenDisplayed()) {
-            view.askSaveGame();
+        if (view.isGameScreenDisplayed() && view.askSaveGame()) {
+            saveGame();
         }
-        game.setLoadGame(); // test
-        // jfilechooser
+
+        File saveDir = new File("saves");
+        JFileChooser fileChooser = new JFileChooser(saveDir);
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            // Load the game from the selected file
+            try {
+                game.setLoadGame(selectedFile);
+
+                // If the game screen is not currently displayed, switch to it
+                if (!view.isGameScreenDisplayed()) {
+                    view.switchToGameScreen();
+                }
+
+                // Update the view to reflect the loaded game state
+                updateView();
+
+            } catch (IOException ex) {
+                // Handle the exception
+                System.err.println("Error loading game: " + ex.getMessage());
+            }
+        }
+    }
+
+    private void updateView() {
+        // Clear all buttons' images
+        view.clearButtonsImages();
+
+        // Set the images and stats labels
+        for (int r = 0; r < 6; r++) {
+            for (int c = 0; c < 7; c++) {
+                Piece piece = board.getPiece(r, c);
+                if (piece != null) {
+                    if (piece instanceof Point) {
+                        view.setPointImage(view.getButton(r, c), piece.getPieceName(), ((Point) piece).getDirection());
+                    } else {
+                        view.setPieceImage(view.getButton(r, c), piece.getPieceName());
+                    }
+                }
+            }
+        }
+        view.setStatLabels(game.getPlayer(), game.getMoveCount());
     }
 
     private void saveGame() {
-        System.out.println("Save"); // test
-        // jfilechooser
+        File saveDir = new File("saves");
+        JFileChooser fileChooser = new JFileChooser(saveDir);
+        fileChooser.setDialogTitle("Specify a file to save");
+
+        int userSelection = fileChooser.showSaveDialog(null);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            String filePath = fileToSave.getAbsolutePath();
+            if (!filePath.endsWith(".txt")) {
+                filePath += ".txt";
+                fileToSave = new File(filePath); // Update the fileToSave object
+            }
+            try {
+                game.setSaveGame(filePath);
+                System.out.println("\"" + fileToSave.getName() + "\" saved to '" + fileToSave.getParent() + "'");
+            } catch (IOException ex) {
+                System.err.println("An error occurred while saving the game: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        }
     }
 
     private void mainMenu() {
-        view.askSaveGame();
+        if (view.askSaveGame()) {
+            saveGame();
+        }
         view.switchToMenuScreen();
     }
 
     private void exit() {
-        if (view.isGameScreenDisplayed()) {
-            view.askSaveGame();
+        if (view.isGameScreenDisplayed() && view.askSaveGame()) {
+            saveGame();
         }
         System.exit(0); // Exit the program
     }
