@@ -96,6 +96,7 @@ public class MenuController {
 
         File saveDir = new File("saves");
         JFileChooser fileChooser = new JFileChooser(saveDir);
+        fileChooser.setDialogTitle("Load game file");
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
@@ -141,7 +142,7 @@ public class MenuController {
     private void saveGame() {
         File saveDir = new File("saves");
         JFileChooser fileChooser = new JFileChooser(saveDir);
-        fileChooser.setDialogTitle("Specify a file to save");
+        fileChooser.setDialogTitle("Save game file");
 
         int userSelection = fileChooser.showSaveDialog(null);
 
