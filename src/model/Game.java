@@ -4,7 +4,6 @@
 package model;
 
 import controller.GameObserver;
-import javafx.scene.control.skin.TextInputControlSkin.Direction;
 import pieces.*;
 
 import java.util.List;
