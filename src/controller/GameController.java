@@ -4,8 +4,8 @@ import model.*;
 import pieces.*;
 import view.*;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import javax.swing.JButton;
 
 public class GameController implements GameObserver {
     private Game game;

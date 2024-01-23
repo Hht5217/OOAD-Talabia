@@ -2,10 +2,7 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JMenuItem;
+import javax.swing.*;
 
 import model.*;
 import pieces.*;
@@ -20,6 +17,9 @@ public class MenuController {
         this.game = talabiaGame;
         this.board = game.getGameBoard();
         this.view = talabiaView;
+    }
+
+    public void initController() {
         view.setUpCloseWindowHandler(() -> saveGame());
         initMenuButtons();
         initMenuItems();
