@@ -271,7 +271,7 @@ public class Game {
      * then call the updateDirection method.
      * 
      * @param piece   the piece to be moved
-     * @param movePos the position of the move being made
+     * @param movePos the position to move the piece to
      * @author HhT
      */
     public void movePiece(Piece piece, Move movePos) {
