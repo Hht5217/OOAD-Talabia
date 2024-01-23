@@ -20,11 +20,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Game {
-    private List<GameObserver> observers = new ArrayList<>();
-    private Board gameBoard;
-    private int moveCount = 0;
-    private PlayerColor currentPlayer;
-    private boolean isGameOver = false;
+    private List<GameObserver> observers = new ArrayList<>(); // The list of observers of game object
+    private Board gameBoard; // The board that will be used to play
+    private int moveCount = 0; // The move count made by players
+    private PlayerColor currentPlayer; // The player to make a move
+    private boolean isGameOver = false; // If game is over
 
     /**
      * The constructor of game object. Only need to initialize the board. The method
