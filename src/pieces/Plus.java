@@ -1,21 +1,34 @@
+/**
+ * The Plus class extends the Piece class and represents the Plus
+ * piece in the game.
+ */
 package pieces;
 
 import java.util.List;
 import model.*;
 
 public class Plus extends Piece {
+    /**
+     * Constructor of Plus piece. Values are inherited from Piece class.
+     * 
+     * @author HhT
+     */
     public Plus(String id, int yPos, int xPos, PlayerColor color, Board pieceBoard) {
         super(id, yPos, xPos, color, pieceBoard);
     }
 
-    // Check if piece is allowed to move, add if allowed and do nothing if not
-    // available moves
+    /**
+     * Implementation of the move calculation abstract method. Movement calculation
+     * of Plus is similar to Time except for the movement direction offsets.
+     * 
+     * @return the list of available moves
+     * @author HhT
+     */
     @Override
-    // public void availableMoves() {
     public List<Move> getAvailableMoves() {
-        movePos.clear();
-        int currentY = getYPos();
-        int currentX = getXPos();
+        moveList.clear(); // Clear the list first before calculating moves
+        int currentY = getYPos(); // The current y position of the piece
+        int currentX = getXPos(); // The current x position of the piece
 
         // Check moves in the vertical and horizontal directions
         int[][] directions = {
@@ -26,37 +39,44 @@ public class Plus extends Piece {
         };
 
         for (int[] direction : directions) {
+            // Initialize the positions first
             int potentialY = currentY;
             int potentialX = currentX;
 
-            while (true) {
+            while (true) { // Add moves into list until loop breaks
+                // Add offsets to positions to get potential move positions
                 potentialY += direction[0];
                 potentialX += direction[1];
 
                 // Check if the move is within the bounds of the board
                 if (!pieceBoard.inBoard(potentialY, potentialX)) {
-                    break; // Break out of the loop if we're off the board
+                    break; // Break out of the loop if move is off the board
                 }
 
-                // Check if the square is empty
+                // Check if the cell is empty
                 if (pieceBoard.isEmptySpace(potentialY, potentialX)) {
-                    movePos.add(new Move(potentialY, potentialX));
-                } else {
-                    // Check if the square contains an opponent's piece
+                    moveList.add(new Move(potentialY, potentialX));
+                } else { // If the cell is not empty,
+                    // Check if it contains an opponent's piece
                     if (!pieceBoard.getPiece(potentialY, potentialX).getColor().equals(this.getColor())) {
-                        movePos.add(new Move(potentialY, potentialX));
+                        moveList.add(new Move(potentialY, potentialX));
                     }
-                    break; // Break out of the loop if we've encountered any piece
+                    break; // Break out of the loop if encountered any piece to stop adding moves
                 }
             }
         }
 
-        return movePos;
+        return moveList;
     }
 
-    // Transform into Time
+    /**
+     * Transformation of Plus piece into Time piece.
+     * 
+     * @author HhT
+     */
     @Override
     public Piece transform() {
+        // Pass the same properties
         return new Time(id, yPos, xPos, color, pieceBoard);
     }
 

@@ -3,8 +3,6 @@
  * player is playing, if game is over, and the move count. Game class also tells
  * the board what to do with the pieces if certain conditions are met, such as
  * the trasnformation of Plus and Time pieces every 4 moves.
- * 
- * @author HhT
  */
 package model;
 
@@ -78,7 +76,7 @@ public class Game {
      * Add Point pieces to the board.
      * 
      * @author HhT
-     * @author LKZ
+     * @author Lim KZ
      */
     private void addPoint(String id, int yPos, int xPos, PlayerColor color, String direction, Board gameBoard) {
         gameBoard.addPiece(new Point(id, yPos, xPos, color, direction, gameBoard));
@@ -88,7 +86,7 @@ public class Game {
      * Add Plus pieces to the board.
      * 
      * @author HhT
-     * @author LKZ
+     * @author Lim KZ
      */
     private void addPlus(String id, int yPos, int xPos, PlayerColor color, Board gameBoard) {
         gameBoard.addPiece(new Plus(id, yPos, xPos, color, gameBoard));
@@ -98,7 +96,7 @@ public class Game {
      * Add Hourglass pieces to the board.
      * 
      * @author HhT
-     * @author LKZ
+     * @author Lim KZ
      */
     private void addHourglass(String id, int yPos, int xPos, PlayerColor color, Board gameBoard) {
         gameBoard.addPiece(new Hourglass(id, yPos, xPos, color, gameBoard));
@@ -108,7 +106,7 @@ public class Game {
      * Add Time pieces to the board.
      * 
      * @author HhT
-     * @author LKZ
+     * @author Lim KZ
      */
     private void addTime(String id, int yPos, int xPos, PlayerColor color, Board gameBoard) {
         gameBoard.addPiece(new Time(id, yPos, xPos, color, gameBoard));
@@ -118,7 +116,7 @@ public class Game {
      * Add Sun pieces to the board.
      * 
      * @author HhT
-     * @author LKZ
+     * @author Lim KZ
      */
     private void addSun(String id, int yPos, int xPos, PlayerColor color, Board gameBoard) {
         gameBoard.addPiece(new Sun(id, yPos, xPos, color, gameBoard));
@@ -198,8 +196,9 @@ public class Game {
 
     /* ---------------------- Manage and modify game state ---------------------- */
     /**
-     * Return the board instance that contains the pieces.
+     * Get the board instance.
      * 
+     * @return the board that contains the pieces
      * @author HhT
      */
     public Board getGameBoard() {
@@ -207,8 +206,9 @@ public class Game {
     }
 
     /**
-     * Return the current move count.
+     * Get the current move count.
      * 
+     * @return the move count.
      * @author HhT
      */
     public int getMoveCount() {
@@ -225,8 +225,9 @@ public class Game {
     }
 
     /**
-     * Return the current player
+     * Check the current player to play
      * 
+     * @return the current player
      * @author HhT
      */
     public PlayerColor getPlayer() {
@@ -248,8 +249,9 @@ public class Game {
     }
 
     /**
-     * Return the boolean that check if game is over.
+     * Check if game is over.
      * 
+     * @return the boolean of game over state
      * @author HhT
      */
     public boolean checkGameOver() {
@@ -270,25 +272,30 @@ public class Game {
      * Move pieces, if sun is captured then game over, and if moved piece is a Point
      * then call the updateDirection method.
      * 
-     * @param piece   the piece to be moved
-     * @param movePos the position to move the piece to
+     * @param piece        the piece to be moved
+     * @param movePosition the position to move the piece to
      * @author HhT
      */
-    public void movePiece(Piece piece, Move movePos) {
-        if (gameBoard.setPiece(piece, movePos)) {
-            notifyGameOver();
+    public void movePiece(Piece piece, Move movePosition) {
+        if (gameBoard.setPiece(piece, movePosition)) { // setPiece returns true if Sun is captured
+            notifyGameOver(); // Notify the observer game is over
         }
 
         if (piece instanceof Point) {
             Point point = (Point) piece;
-            point.updateDirection();
+            /*
+             * setDirection will check if Point reaches border, if true then change
+             * direction of Point
+             */
+            point.setDirection();
         }
     }
 
     /**
-     * Return the boolean of whether transformation is allowed to happen by checking
-     * the move count.
+     * Check whether transformation is allowed to happen by checking the move count.
      * 
+     * @return true if move count is divisible by 4
+     * @return false if move count is not divisible by 4
      * @author HhT
      */
     public boolean checkTransformation() {
@@ -352,15 +359,15 @@ public class Game {
                             break;
                         case "piece": // Load different information of pieces
                             String[] pieceParts = value.split(", "); // Split information at ","
-                            String type = pieceParts[0];
-                            String id = pieceParts[1];
-                            int yPos = Integer.parseInt(pieceParts[2]);
-                            int xPos = Integer.parseInt(pieceParts[3]);
+                            String type = pieceParts[0]; // The type of the piece
+                            String id = pieceParts[1]; // The unique id assigned to the piece
+                            int yPos = Integer.parseInt(pieceParts[2]); // Y position of the piece on the board
+                            int xPos = Integer.parseInt(pieceParts[3]); // X position of the piece on the board
                             PlayerColor color = pieceParts[4].equals("YELLOW") ? PlayerColor.YELLOW : PlayerColor.BLUE;
-                            Piece pieceToLoad;
+                            Piece pieceToLoad; // The piece to be loaded onto the board
                             PieceFactory factory = new PieceFactory(); // Create pieces using piece factory
                             if ("Point".equals(type)) { // Point piece needs to load direction
-                                String direction = pieceParts[5];
+                                String direction = pieceParts[5]; // The direction of the Point piece
                                 pieceToLoad = factory.createPiece(type, id, yPos, xPos, color, direction, gameBoard);
                             } else {
                                 pieceToLoad = factory.createPiece(type, id, yPos, xPos, color, gameBoard);
@@ -371,11 +378,13 @@ public class Game {
                     }
                 }
             }
-        } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException ex) {
+        }
+        // Catch exception in case loaded file has problems ie. it has been modified
+        catch (IllegalArgumentException | ArrayIndexOutOfBoundsException ex) {
             throw new IOException("Invalid save file: Check the content", ex);
         }
 
-        notifyLoadGame();
+        notifyLoadGame(); // Notify the observer that a game has been loaded
     }
 
     /**
@@ -420,7 +429,7 @@ public class Game {
             }
         }
 
-        // Write the lines to the file
+        // Write the lines to the file and store at choosen file path
         Files.write(Paths.get(filePath), lines, StandardCharsets.UTF_8);
     }
 

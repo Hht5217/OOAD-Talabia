@@ -1,3 +1,8 @@
+/**
+ * The View class represents the graphical user interface (GUI) for a chess
+ * game. It extends the JFrame class and contains methods for creating the menu
+ * screen, game screen, and essential GUI components.
+ */
 package view;
 
 import java.awt.*;
@@ -10,12 +15,12 @@ import javax.swing.*;
 import model.*;
 
 public class View extends JFrame {
-    // For this program the width / row and height column remains the same
-    private static final int ROWS = 6;
+    // Constants defining the number of rows and columns in the chessboard
+    private static final int ROW = 6;
     private static final int COLUMN = 7;
 
     // Maps of components that needs to add action listeners
-    private Map<String, JButton> menuButtons = new HashMap<>(); // Store the buttons on first screen
+    private Map<String, JButton> menuButtons = new HashMap<>(); // Store the buttons on menu screen
     private Map<String, JMenuItem> menuBarItems = new HashMap<>(); // Store menu bar components
 
     // Screens/view of the program
@@ -27,17 +32,24 @@ public class View extends JFrame {
     private JMenuBar gameMenuBar; // The navigation bar
     private JLabel playerLabel; // The text below the navigation bar
     private JLabel moveCountLabel; // Same as above
-    private JButton[][] chessButtons = new JButton[ROWS][COLUMN]; // The 2d array to store buttons
+    private JButton[][] chessButtons = new JButton[ROW][COLUMN]; // The 2d array to store buttons
     private CardLayout cardLayout = new CardLayout(); // The cardlayout, used to switch screens
     private JPanel screens = new JPanel(cardLayout); // A holder for the screens that uses cardlayout
 
+    // The buttons dimension that will remain same no matter the window size
     private int buttonWidth;
     private int buttonHeight;
 
+    /**
+     * Constructor of View object. Initializes the GUI components and creates the
+     * initial screen.
+     * 
+     * @author HhT
+     */
     public View() {
         super("Talabia"); // Title of the program
         setSize(new Dimension(700, 600)); // The size when program starts
-        setMinimumSize(new java.awt.Dimension(700, 600)); // set minimumsize for JFrame
+        setMinimumSize(new java.awt.Dimension(700, 600)); // Set minimums size for window
 
         /*
          * These components are initialized here first so that it is not returned null
@@ -46,8 +58,8 @@ public class View extends JFrame {
         playerLabel = new JLabel("Current player:");
         moveCountLabel = new JLabel("Move Count:");
 
-        // Add empty buttons to the 2d array
-        for (int r = 0; r < ROWS; r++) {
+        // Add empty buttons to the 2D array
+        for (int r = 0; r < ROW; r++) {
             for (int c = 0; c < COLUMN; c++) {
                 String buttonName = ("r" + r + "c" + c); // Create name String for button
                 JButton chessButton = new JButton(); // Create new button
@@ -81,30 +93,12 @@ public class View extends JFrame {
         });
     }
 
-    /*
-     * Do nothing when close window is clicked, but implements conditions to do
-     * something when clicked, in this case display a window to ask user whether to
-     * save game. The Runnable saveGameActon is to let the menu controller class to
-     * run the saveGame method.
-     */
-    public void setUpCloseWindowHandler(Runnable saveGameAction) {
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                if (isGameScreen) {
-                    if (askSaveGame()) {
-                        saveGameAction.run();
-                    }
-                }
-                System.exit(0);
-            }
-        });
-    }
-
-    /*
+    /* ------------------------- Initialization methods ------------------------- */
+    /**
      * The method to create essential GUI components, mostly those that will be used
-     * throughout the program
+     * throughout the program.
+     * 
+     * @author HhT
      */
     private void createGUI() {
         // Add the screens to cardlayout screen holder after creating them
@@ -121,7 +115,12 @@ public class View extends JFrame {
         add(screens);
     }
 
-    /* Create and return menu screen */
+    /**
+     * Create the menu screen of the program.
+     * 
+     * @return the menu screen panel
+     * @author HhT
+     */
     private JPanel createMenuScreen() {
         menuScreen = new JPanel(); // Initialize the menu screen
         menuScreen.setLayout(new BoxLayout(menuScreen, BoxLayout.Y_AXIS)); // Set the layout of menu screen
@@ -161,27 +160,34 @@ public class View extends JFrame {
         return menuScreen;
     }
 
-    /* Create and return game screen */
+    /**
+     * Create the screen that displays gameplay.
+     * 
+     * @return the game screen panel
+     * @author HhT
+     */
     private JPanel createGameScreen() {
-        gameScreen = new JPanel();
-        gameScreen.setLayout(new BorderLayout());
-        /**
-         * currently using borderlayout for statPanel, if more labels will be added then
+        gameScreen = new JPanel(); // Initialize the game screen
+        gameScreen.setLayout(new BorderLayout()); // Set the layout of game screen
+        /*
+         * Currently using borderlayout for statePanel, if more labels will be added
+         * then
          * consider using flowlayout
          */
-        JPanel statPanel = new JPanel(new BorderLayout());
+        JPanel statePanel = new JPanel(new BorderLayout());
 
-        statPanel.add(playerLabel, BorderLayout.WEST);
-        statPanel.add(moveCountLabel, BorderLayout.EAST);
+        // Add labels to the game state panel
+        statePanel.add(playerLabel, BorderLayout.WEST);
+        statePanel.add(moveCountLabel, BorderLayout.EAST);
+        // Add the state panel to game screen
+        gameScreen.add(statePanel, BorderLayout.NORTH);
 
-        gameScreen.add(statPanel, BorderLayout.NORTH);
+        JPanel boardPanel = new JPanel(); // Initialize the panel of the chessboard
+        boardPanel.setLayout(new GridLayout(6, 7)); // Set the layout for chessboard
+        gameScreen.add(boardPanel, BorderLayout.CENTER); // Add the chessboard to game screen
 
-        JPanel boardPanel = new JPanel();
-        boardPanel.setLayout(new GridLayout(6, 7));
-        gameScreen.add(boardPanel, BorderLayout.CENTER);
-
-        // Adds empty button for the chess board
-        for (int r = 0; r < ROWS; r++) {
+        // Add empty buttons for the chessboard
+        for (int r = 0; r < ROW; r++) {
             for (int c = 0; c < COLUMN; c++) {
                 boardPanel.add(chessButtons[r][c]);
             }
@@ -190,9 +196,11 @@ public class View extends JFrame {
         return gameScreen;
     }
 
-    /*
-     * Separate method since this part is too long, and easy to modify such as add
-     * new menu item
+    /**
+     * Create menu bar and menu items.
+     * 
+     * @return the menu bar with menu items in it
+     * @author HhT
      */
     private JMenuBar createMenu() {
         // Create the menu bar
@@ -238,7 +246,50 @@ public class View extends JFrame {
         return menuBar;
     }
 
-    /* Switch to menu screen from the screens holder using cardlayout */
+    /**
+     * Do nothing when close window is clicked, but implements conditions to do
+     * something when clicked, in this case display a window to ask user whether to
+     * save game. The Runnable saveGameActon is to let the menu controller class to
+     * run the saveGame method.
+     * 
+     * @author HhT
+     */
+    public void setUpCloseWindowHandler(Runnable saveGameAction) {
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (isGameScreen) { // If game screen is displayed
+                    if (askSaveGame()) { // If user choose to save game
+                        saveGameAction.run(); // Perform save game action
+                    }
+                }
+                System.exit(0); // Exit the program
+            }
+        });
+    }
+
+    /**
+     * Set the labels of game states.
+     * 
+     * @author HhT
+     */
+    public void setStateLabels(PlayerColor player, int moveCount) {
+        // Space at the end to prevent text sticking to window
+        moveCountLabel.setText("Move Count: " + Integer.toString(moveCount) + " ");
+
+        // If player is yellow then set yellow, if not then set blue
+        String currentPlayer = (player == PlayerColor.YELLOW) ? "YELLOW" : "BLUE";
+        playerLabel.setText("Current player: " + currentPlayer);
+    }
+    /* -------------------------------------------------------------------------- */
+
+    /* ------------------------- Screen related methods ------------------------- */
+    /**
+     * Switch to menu screen from the screens holder using cardlayout.
+     * 
+     * @author HhT
+     */
     public void switchToMenuScreen() {
         cardLayout.show(screens, "MenuScreen");
         isGameScreen = false;
@@ -246,7 +297,11 @@ public class View extends JFrame {
         setJMenuBar(null);
     }
 
-    /* Switch to game screen from the screens holder using cardlayout */
+    /**
+     * Switch to game screen from the screens holder using cardlayout.
+     * 
+     * @author HhT
+     */
     public void switchToGameScreen() {
         cardLayout.show(screens, "GameScreen");
         isGameScreen = true;
@@ -254,125 +309,50 @@ public class View extends JFrame {
         setJMenuBar(gameMenuBar);
     }
 
-    /* Get the boolean to see if the current screen displayed is game screen */
+    /**
+     * Check if game screen is being displayed.
+     * 
+     * @return true if game screen is displayed
+     * @author HhT
+     */
     public boolean isGameScreenDisplayed() {
         return isGameScreen;
     }
+    /* -------------------------------------------------------------------------- */
 
-    /* Get specific main menu button from the map using the key (the name) */
+    /* ------------------------- Menu components methods ------------------------ */
+    /**
+     * Get specific main menu button from the map using the key (the name).
+     * 
+     * @param key the key of the button
+     * @return the main menu button
+     * @author HhT
+     */
     public JButton getMainMenuButton(String key) {
         return menuButtons.get(key);
     }
 
-    /* Get specific menu item from the map using the key (the name) */
+    /**
+     * Get specific menu item from the map using the key (the name).
+     * 
+     * @param key the key of the button
+     * @return the menu item
+     * @author HhT
+     */
     public JMenuItem getMenuBarItem(String key) {
         return menuBarItems.get(key);
     }
+    /* -------------------------------------------------------------------------- */
 
-    /* Set images to buttons according to pieces' name */
-    public void setPieceImage(JButton buttonToSet, String pieceName) {
-        String imageName = (pieceName.replaceAll("\\d", "")) + ".png"; // Remove all digits from pieceName
-        setImage(buttonToSet, imageName);
-    }
-
+    /* ------------------------- Button related methods ------------------------- */
     /**
-     * Used for setting image for Point pieces
+     * Get a specific button from their position.
      * 
-     * @param buttonToSet the button that image will be updated
-     * @param pieceName   the name of the piece, specifically Point piece
-     * @param direction   the direction of the piece and also the direction of the
-     *                    image to be set
+     * @param row the row where the button is at
+     * @param col the column where the button is at
+     * @return the button
+     * @author HhT
      */
-    public void setPointImage(JButton buttonToSet, String pieceName, String direction) {
-        String nameWithoutID = pieceName.replaceAll("\\d", "");
-        String imageName = (direction.equals("NORTH")) ? nameWithoutID + "N.png" : nameWithoutID + "S.png";
-        setImage(buttonToSet, imageName);
-    }
-
-    /* The general set image method */
-    private void setImage(JButton button, String imageName) {
-        URL imageUrl = getClass().getClassLoader().getResource(imageName);
-        if (imageUrl != null) {
-            Image image = new ImageIcon(imageUrl).getImage();
-            ImageIcon icon = new ImageIcon(
-                    image.getScaledInstance((buttonWidth * 8 / 10), (buttonHeight * 8 / 10), Image.SCALE_SMOOTH));
-            icon.setDescription(imageName);
-            button.setIcon(icon);
-        } else {
-            System.out.println("Image not found: " + imageName);
-        }
-    }
-
-    /* Clear all buttons' images before setting them again */
-    public void clearButtonsImages() {
-        for (int r = 0; r < ROWS; r++) {
-            for (int c = 0; c < COLUMN; c++) {
-                chessButtons[r][c].setIcon(null);
-            }
-        }
-    }
-
-    /* Set background color of a button */
-    public void setButtonBackgroundColor(JButton button, Color color) {
-        button.setBackground(color);
-    }
-
-    /* Highlight or hide available moves and the buttons related */
-    public void setAvailableMovesColor(java.util.List<Move> availableMoves, Color color) {
-        for (Move moves : availableMoves) {
-            chessButtons[moves.getMoveRow()][moves.getMoveColumn()].setBackground(color);
-        }
-    }
-
-    /* Move images from one button to another */
-    public void moveButton(JButton originalButton, JButton movingButton) {
-        Icon icon = originalButton.getIcon();
-        movingButton.setIcon(icon);
-        originalButton.setIcon(null);
-    }
-
-    /**
-     * First iterate through the chess buttons array to check if there is any icon.
-     * If yes then check the description of the icon, in this case description has
-     * been set as piece name .png beforehand. If the icon description is equal to
-     * the pieces that will transform, then insert new image name (the name of image
-     * that will be updated), then use set piece image method to update the icon.
-     */
-    public void transformImage() {
-        for (int r = 0; r < ROWS; r++) {
-            for (int c = 0; c < COLUMN; c++) {
-                Icon originalIcon = chessButtons[r][c].getIcon();
-                if (originalIcon != null && originalIcon instanceof ImageIcon) {
-                    String originalIconName = ((ImageIcon) originalIcon).getDescription();
-                    String newImageName = null;
-                    if (originalIconName.equals("yPlus.png")) {
-                        newImageName = "yTime";
-                    } else if (originalIconName.equals("yTime.png")) {
-                        newImageName = "yPlus";
-                    } else if (originalIconName.equals("bPlus.png")) {
-                        newImageName = "bTime";
-                    } else if (originalIconName.equals("bTime.png")) {
-                        newImageName = "bPlus";
-                    }
-                    if (newImageName != null) {
-                        setPieceImage(chessButtons[r][c], newImageName);
-                    }
-                }
-            }
-        }
-    }
-
-    /* Set the labels of move count and current player */
-    public void setStatLabels(PlayerColor player, int moveCount) {
-        // Space at the end to prevent text sticking to window
-        moveCountLabel.setText("Move Count: " + Integer.toString(moveCount) + " ");
-
-        // If player is yellow then set yellow, if not then blue
-        String currentPlayer = (player == PlayerColor.YELLOW) ? "YELLOW" : "BLUE";
-        playerLabel.setText("Current player: " + currentPlayer);
-    }
-
-    /* Get a specific button from their position */
     public JButton getButton(int row, int col) {
         return chessButtons[row][col];
     }
@@ -382,9 +362,14 @@ public class View extends JFrame {
      * position from button -v
      */
 
-    /* Get the button's position */
+    /**
+     * Get the button's position.
+     * 
+     * @return button's position as move object
+     * @author HhT
+     */
     public Move getButtonPosition(JButton button) {
-        for (int r = 0; r < ROWS; r++) {
+        for (int r = 0; r < ROW; r++) {
             for (int c = 0; c < COLUMN; c++) {
                 if (chessButtons[r][c] == button) {
                     return new Move(r, c); // return the position as move object (pair of integers)
@@ -395,13 +380,156 @@ public class View extends JFrame {
         return null;
     }
 
-    /* Display game over message (add parameters to show who won) */
+    /**
+     * Get images to buttons according to pieces' name and set the image.
+     * 
+     * @param buttonToSet the button to set the image on
+     * @param pieceName   the name of the piece, to get the image file
+     * @author HhT
+     */
+    public void setPieceImage(JButton buttonToSet, String pieceName) {
+        String imageName = (pieceName.replaceAll("\\d", "")) + ".png"; // Remove all digits from pieceName
+        setImage(buttonToSet, imageName); // Set the image
+    }
+
+    /**
+     * Get image for Point pieces and set the image.
+     * 
+     * @param buttonToSet the button to set the image on
+     * @param pieceName   the name of the piece, specifically Point piece
+     * @param direction   the direction of the piece, to get the image with the
+     *                    correct direction
+     * @author HhT
+     */
+    public void setPointImage(JButton buttonToSet, String pieceName, String direction) {
+        String nameWithoutID = pieceName.replaceAll("\\d", "");
+        String imageName = (direction.equals("NORTH")) ? nameWithoutID + "N.png" : nameWithoutID + "S.png";
+        setImage(buttonToSet, imageName); // Set the image
+    }
+
+    /**
+     * Set image for pieces.
+     * 
+     * @param button    the button to set the image on
+     * @param imageName the name of the image to be set
+     * @author HhT
+     */
+    private void setImage(JButton button, String imageName) {
+        URL imageUrl = getClass().getClassLoader().getResource(imageName); // Get image file with image name
+        if (imageUrl != null) { // If image file is found
+            Image image = new ImageIcon(imageUrl).getImage(); // Create image object
+            // Create icon object using the image
+            ImageIcon icon = new ImageIcon(
+                    image.getScaledInstance((buttonWidth * 8 / 10), (buttonHeight * 8 / 10), Image.SCALE_SMOOTH));
+            icon.setDescription(imageName); // Set description using image name
+            button.setIcon(icon); // Set the icon for button
+        } else { // If image file is not found
+            // Print error message
+            System.out.println("Image not found: " + imageName + ". Check if image is missing.");
+        }
+    }
+
+    /**
+     * Clear all buttons' images before setting them again.
+     * 
+     * @author HhT
+     */
+    public void clearButtonsImages() {
+        for (int r = 0; r < ROW; r++) {
+            for (int c = 0; c < COLUMN; c++) {
+                chessButtons[r][c].setIcon(null);
+            }
+        }
+    }
+
+    /**
+     * Set background color of a button.
+     * 
+     * @author HhT
+     */
+    public void setButtonBackgroundColor(JButton button, Color color) {
+        button.setBackground(color);
+    }
+
+    /**
+     * Highlight or hide buttons according to moves position.
+     * 
+     * @author HhT
+     */
+    public void setAvailableMovesColor(java.util.List<Move> availableMoves, Color color) {
+        for (Move moves : availableMoves) {
+            chessButtons[moves.getMoveRow()][moves.getMoveColumn()].setBackground(color);
+        }
+    }
+
+    /**
+     * Move image from one button to another.
+     * 
+     * @param originalButton the button to get the image
+     * @param moveToButton   the button to set the image
+     */
+    public void moveButtonImage(JButton originalButton, JButton moveToButton) {
+        Icon icon = originalButton.getIcon();
+        moveToButton.setIcon(icon);
+        originalButton.setIcon(null);
+    }
+
+    /**
+     * Modify the images of transformed pieces.
+     * 
+     * @author HhT
+     */
+    public void transformImage() {
+        // Iterate through the chess buttons array
+        for (int r = 0; r < ROW; r++) {
+            for (int c = 0; c < COLUMN; c++) {
+                // Check if the button has any icon
+                Icon originalIcon = chessButtons[r][c].getIcon();
+                if (originalIcon != null && originalIcon instanceof ImageIcon) { // If yes
+                    // Get the name of the image from previously set description
+                    String originalIconName = ((ImageIcon) originalIcon).getDescription();
+                    // Initialize a String to set the image name for setting the image later
+                    String newImageName = null;
+                    // Check which image to set if image name is one of the following
+                    if (originalIconName.equals("yPlus.png")) {
+                        newImageName = "yTime";
+                    } else if (originalIconName.equals("yTime.png")) {
+                        newImageName = "yPlus";
+                    } else if (originalIconName.equals("bPlus.png")) {
+                        newImageName = "bTime";
+                    } else if (originalIconName.equals("bTime.png")) {
+                        newImageName = "bPlus";
+                    }
+                    // If there is an image name, meaning there is an image to be set
+                    if (newImageName != null) {
+                        setPieceImage(chessButtons[r][c], newImageName); // Set the image to button
+                    }
+                }
+                // If no icon do nothing
+            }
+        }
+    }
+    /* -------------------------------------------------------------------------- */
+
+    /* ------------------------- Pop up windows methods ------------------------- */
+    /**
+     * Display game over message and show the winner of the game.
+     * 
+     * @param winner the winner of the game
+     * @author HhT
+     */
     public void displayGameOver(String winner) {
         JOptionPane.showMessageDialog(this, ("Game Over! " + winner + " has won!"), "Talabia",
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    /* Display pop up to confirm whether to save game */
+    /**
+     * Display pop up to confirm whether to save game.
+     * 
+     * @return true if Yes is choosen
+     * @return false if No is choosen
+     * @author HhT
+     */
     public boolean askSaveGame() {
         int option = JOptionPane.showConfirmDialog(this, "Do you want to save the current game?", "Save Game",
                 JOptionPane.YES_NO_OPTION);
@@ -412,10 +540,25 @@ public class View extends JFrame {
         }
     }
 
-    /* Display window that shows how to play the game */
+    /**
+     * Display pop up after game saved and the directory saved.
+     * 
+     * @author HhT
+     */
+    public void askSaveGamePopup(String fileName, String directory) {
+        JOptionPane.showMessageDialog(null, "\"" + fileName + "\" saved to '" + directory + "'");
+    }
+
+    /**
+     * Display window that shows how to play the game.
+     * 
+     * @author HhT
+     */
     public void showGuide() {
+        // Create a dialog (a pop up window)
         JDialog dialog = new JDialog(this, "How to Play", true);
 
+        // The *very very very* long message that will be shown
         String guideMessage = "<html>"
                 + "<body>"
                 + "<p>Talabia Chess is an engaging game played by 2 players on a 7x6 board, with interactive<br>gameplay involving clicking on the chess pieces displayed on your screen.</p>"
@@ -448,22 +591,46 @@ public class View extends JFrame {
                 + "</body>"
                 + "</html>";
 
-        JLabel label = new JLabel(guideMessage);
+        JLabel label = new JLabel(guideMessage); // Put the long message into a label
+        // Align the label
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setVerticalAlignment(JLabel.CENTER);
 
-        // Create a JScrollPane and add the JLabel to it
+        // Create a scrollable pop up and add the label to it
         JScrollPane scrollPane = new JScrollPane(label);
 
-        dialog.getContentPane().add(scrollPane);
+        dialog.getContentPane().add(scrollPane); // add the scrollpane to the dialog
         dialog.setSize(new Dimension(550, 450)); // Set the size of the dialog
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true); // Display the pop up
     }
 
-    /* Display pop window that includes simple description */
+    /**
+     * Display pop window that includes simple description.
+     * 
+     * @author HhT
+     */
     public void showAbout() {
         JOptionPane.showMessageDialog(this,
                 "Talabia Chess, created by group Nauru\nTan Hong Han\nLim Kian Zee\nLam Zi Foong\nChai Di Sheng\nTan Yi Kai\nVersion 1.0");
     }
+    /* -------------------------------------------------------------------------- */
+
+    /* ----------------------------- Class constants ---------------------------- */
+    /**
+     * @return the board row constant
+     * @author HhT
+     */
+    public static int getRowConstant() {
+        return ROW;
+    }
+
+    /**
+     * @return the board column constant
+     * @author HhT
+     */
+    public static int getColumnConstant() {
+        return COLUMN;
+    }
+    /* ----------------------------------- End ---------------------------------- */
 }
