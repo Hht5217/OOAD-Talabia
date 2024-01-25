@@ -4,7 +4,7 @@
  * the board what to do with the pieces if certain conditions are met, such as
  * the trasnformation of Plus and Time pieces every 4 moves.
  */
-package model;
+package src.model;
 
 import controller.GameObserver;
 import pieces.*;

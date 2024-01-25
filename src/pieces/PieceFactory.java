@@ -2,7 +2,7 @@
  * The PieceFactory class uses the Factory design pattern, which provides a way
  * to encapsulate the instantiation of concrete classes.
  */
-package pieces;
+package src.pieces;
 
 import model.*;
 
@@ -17,7 +17,7 @@ public class PieceFactory {
      * @param color     the color of the piece
      * @param gameBoard the board the piece is on
      * @return the created piece
-     * @author HhTs
+     * @author HhTs & lkz
      */
     public Piece createPiece(String type, String id, int yPos, int xPos, PlayerColor color, Board gameBoard) {
         switch (type) {

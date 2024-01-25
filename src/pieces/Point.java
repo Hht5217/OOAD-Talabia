@@ -3,7 +3,7 @@
 * game. The Point piece has an additional property, moveDirection, which
 * determines the direction in which the piece can move.
 */
-package pieces;
+package src.pieces;
 
 import java.util.*;
 
@@ -18,7 +18,7 @@ public class Point extends Piece {
      * Constructor of Point piece. Values are inherited from Piece class, plus an
      * addition of moveDirection properties.
      * 
-     * @author HhT
+     * @author HhT & lkz
      */
     public Point(String id, int yPos, int xPos, PlayerColor color, String moveDirection, Board pieceBoard) {
         super(id, yPos, xPos, color, pieceBoard);

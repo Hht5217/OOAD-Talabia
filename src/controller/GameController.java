@@ -4,7 +4,7 @@
  * implementing the GameObserver interface. It can receive updates about 
  * changes in the game state.
  */
-package controller;
+package src.controller;
 
 import model.*;
 import pieces.*;

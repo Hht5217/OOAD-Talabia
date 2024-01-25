@@ -4,7 +4,7 @@
  * types of chess pieces will have. This class serves as a blueprint from which
  * other specific chess piece classes are derived.
  */
-package pieces;
+package src.pieces;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public abstract class Piece {
      * @param xPos       the x position
      * @param color      the color
      * @param pieceBoard the board piece is on
-     * @author HhT
+     * @author HhT & lkz
      */
     public Piece(String id, int yPos, int xPos, PlayerColor color, Board pieceBoard) {
         this.id = id;
@@ -49,7 +49,7 @@ public abstract class Piece {
      * Get the id of the piece.
      * 
      * @return the id in String
-     * @author HhT
+     * @author HhT & lkz
      */
     public String getId() {
         return id;
@@ -59,7 +59,7 @@ public abstract class Piece {
      * Get the y position of the piece on the board.
      * 
      * @return the y position in int
-     * @author HhT
+     * @author HhT & lkz
      */
     public int getYPos() {
         return yPos;
@@ -69,7 +69,7 @@ public abstract class Piece {
      * Get the x position of the piece on the board.
      * 
      * @return the x position in int
-     * @author HhT
+     * @author HhT & lkz
      */
     public int getXPos() {
         return xPos;
@@ -79,7 +79,7 @@ public abstract class Piece {
      * Get which player the piece belongs to.
      * 
      * @return the player color
-     * @author HhT
+     * @author HhT & lkz
      */
     public PlayerColor getColor() {
         return color;
@@ -89,7 +89,7 @@ public abstract class Piece {
      * Get the state of whether the piece is selected by user.
      * 
      * @return true if selected
-     * @author HhT
+     * @author HhT & lkz
      */
     public boolean getSelected() {
         return selected;
@@ -122,7 +122,7 @@ public abstract class Piece {
      * 
      * @param newYPos new y position
      * @param newXPos new x position
-     * @author HhT
+     * @author HhT & lkz
      */
     public void setPosition(int newYPos, int newXPos) {
         this.yPos = newYPos;
@@ -133,7 +133,7 @@ public abstract class Piece {
      * Set state when piece is selected or deselected.
      * 
      * @param select true when selected and false when deselected
-     * @author HhT
+     * @author HhT & lkz
      */
     public void setSelected(boolean select) {
         this.selected = select;

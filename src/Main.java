@@ -1,3 +1,5 @@
+package src;
+
 
 /**
  * Main class serves as the entry point for the application and is responsible

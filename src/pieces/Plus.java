@@ -2,7 +2,7 @@
  * The Plus class extends the Piece class and represents the Plus
  * piece in the game.
  */
-package pieces;
+package src.pieces;
 
 import java.util.List;
 import model.*;
@@ -11,7 +11,7 @@ public class Plus extends Piece {
     /**
      * Constructor of Plus piece. Values are inherited from Piece class.
      * 
-     * @author HhT
+     * @author HhT & lkz
      */
     public Plus(String id, int yPos, int xPos, PlayerColor color, Board pieceBoard) {
         super(id, yPos, xPos, color, pieceBoard);

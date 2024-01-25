@@ -5,7 +5,7 @@
  * representing and manipulating the positions of various elements such as
  * pieces or buttons on the board.
  */
-package model;
+package src.model;
 
 public class Move {
     private int row; // Represents row or y position
@@ -16,7 +16,7 @@ public class Move {
      * 
      * @param row    the row / y position
      * @param column the column / x position
-     * @author HhT
+     * @author HhT & lkz
      */
     public Move(int row, int column) {
         this.row = row;
@@ -25,7 +25,7 @@ public class Move {
 
     /**
      * @return the row
-     * @author HhT
+     * @author HhT & lkz
      */
     public int getMoveRow() {
         return row;
@@ -33,7 +33,7 @@ public class Move {
 
     /**
      * @return the column
-     * @author HhT
+     * @author HhT & lkz
      */
     public int getMoveColumn() {
         return column;
