@@ -1,3 +1,4 @@
+// Example save file.
 // The move count made
 moveCount: 1
 // The player to play a move
