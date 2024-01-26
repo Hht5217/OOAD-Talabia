@@ -29,6 +29,7 @@ public abstract class Piece {
      * @param color      the color
      * @param pieceBoard the board piece is on
      * @author HhT
+     * @author Lim KZ
      */
     public Piece(String id, int yPos, int xPos, PlayerColor color, Board pieceBoard) {
         this.id = id;
@@ -50,6 +51,7 @@ public abstract class Piece {
      * 
      * @return the id in String
      * @author HhT
+     * @author Lim KZ
      */
     public String getId() {
         return id;
@@ -60,6 +62,7 @@ public abstract class Piece {
      * 
      * @return the y position in int
      * @author HhT
+     * @author Lim KZ
      */
     public int getYPos() {
         return yPos;
@@ -70,6 +73,7 @@ public abstract class Piece {
      * 
      * @return the x position in int
      * @author HhT
+     * @author Lim KZ
      */
     public int getXPos() {
         return xPos;
@@ -80,6 +84,7 @@ public abstract class Piece {
      * 
      * @return the player color
      * @author HhT
+     * @author Lim KZ
      */
     public PlayerColor getColor() {
         return color;
@@ -90,6 +95,7 @@ public abstract class Piece {
      * 
      * @return true if selected
      * @author HhT
+     * @author Lim KZ
      */
     public boolean getSelected() {
         return selected;
@@ -123,6 +129,7 @@ public abstract class Piece {
      * @param newYPos new y position
      * @param newXPos new x position
      * @author HhT
+     * @author Lim KZ
      */
     public void setPosition(int newYPos, int newXPos) {
         this.yPos = newYPos;
@@ -134,6 +141,7 @@ public abstract class Piece {
      * 
      * @param select true when selected and false when deselected
      * @author HhT
+     * @author Lim KZ
      */
     public void setSelected(boolean select) {
         this.selected = select;

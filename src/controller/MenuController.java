@@ -109,10 +109,16 @@ public class MenuController {
     private void newGame() {
         /*
          * If game screen is being displayed, then ask user whether to save the game, if
-         * yes then only save the game
+         * Yes then only save the game. If user cancels by clicking 'X', abandon the
+         * action.
          */
-        if (view.isGameScreenDisplayed() && view.askSaveGame()) {
-            saveGame();
+        if (view.isGameScreenDisplayed()) {
+            int saveGameOption = view.askSaveGame();
+            if (saveGameOption == JOptionPane.YES_OPTION) {
+                saveGame();
+            } else if (saveGameOption == JOptionPane.CANCEL_OPTION || saveGameOption == JOptionPane.CLOSED_OPTION) {
+                return; // Do nothing
+            }
         }
 
         game.setNewGame(); // Tell Game to set a new game by modifying game state values
@@ -134,8 +140,15 @@ public class MenuController {
      */
     private void loadGame() {
         // Same function, refer to newGame()
-        if (view.isGameScreenDisplayed() && view.askSaveGame()) {
-            saveGame();
+        if (view.isGameScreenDisplayed()) {
+            int saveGameOption = view.askSaveGame();
+            if (saveGameOption == JOptionPane.YES_OPTION) {
+                saveGame();
+            } else if (saveGameOption == JOptionPane.CANCEL_OPTION || saveGameOption == JOptionPane.CLOSED_OPTION) {
+                // If the user cancelled or closed the dialog, abort loading the game
+                return;
+            }
+            // If the user chose No, continue with loading the game
         }
 
         File saveDir = new File("saves"); // Point to the "saves" directory
@@ -185,7 +198,7 @@ public class MenuController {
             try {
                 game.setSaveGame(filePath); // Save the file
                 // Display pop up window after saving game
-                view.askSaveGamePopup(fileToSave.getName(), fileToSave.getParent());
+                view.gameSavedPopup(fileToSave.getName(), fileToSave.getParent());
             }
             // Catch exception in case save game failed
             catch (IOException ex) {
@@ -230,10 +243,17 @@ public class MenuController {
      * @author HhT
      */
     private void mainMenu() {
-        if (view.askSaveGame()) { // Ask if user wants to save game before switching
-            saveGame();
+        // If the game screen is displayed, ask the user if they want to save the game
+        if (view.isGameScreenDisplayed()) {
+            int option = view.askSaveGame();
+            if (option == JOptionPane.YES_OPTION) {
+                saveGame();
+            } else if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
+                // If the user cancelled or closed the dialog, do not switch to the menu screen
+                return;
+            }
         }
-        view.switchToMenuScreen(); // Switch
+        view.switchToMenuScreen(); // Switch to the menu screen
     }
 
     /**
@@ -242,10 +262,19 @@ public class MenuController {
      * @author HhT
      */
     private void exit() {
-        if (view.isGameScreenDisplayed() && view.askSaveGame()) { // Similar, refer to newGame()
-            saveGame();
+        // If the game screen is displayed, ask the user if they want to save the game
+        if (view.isGameScreenDisplayed()) {
+            int option = view.askSaveGame();
+            if (option == JOptionPane.YES_OPTION) {
+                saveGame();
+                System.exit(0); // Exit the program after saving
+            } else if (option == JOptionPane.NO_OPTION) {
+                System.exit(0); // Exit the program without saving
+            }
+            // If the user selects 'Cancel' or closes the dialog, do nothing (do not exit)
+        } else {
+            System.exit(0); // Exit the program if the game screen is not displayed
         }
-        System.exit(0); // Exit the program
     }
 
     /**

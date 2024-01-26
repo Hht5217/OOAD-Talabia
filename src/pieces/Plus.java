@@ -12,6 +12,7 @@ public class Plus extends Piece {
      * Constructor of Plus piece. Values are inherited from Piece class.
      * 
      * @author HhT
+     * @author Lim KZ
      */
     public Plus(String id, int yPos, int xPos, PlayerColor color, Board pieceBoard) {
         super(id, yPos, xPos, color, pieceBoard);

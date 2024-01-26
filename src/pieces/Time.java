@@ -23,6 +23,7 @@ public class Time extends Piece {
      * 
      * @return the list of available moves
      * @author HhT
+     * @author Lim KZ
      */
     @Override
     public List<Move> getAvailableMoves() {

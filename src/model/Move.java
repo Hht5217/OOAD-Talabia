@@ -17,6 +17,7 @@ public class Move {
      * @param row    the row / y position
      * @param column the column / x position
      * @author HhT
+     * @author Lim KZ
      */
     public Move(int row, int column) {
         this.row = row;
@@ -26,6 +27,7 @@ public class Move {
     /**
      * @return the row
      * @author HhT
+     * @author Lim KZ
      */
     public int getMoveRow() {
         return row;

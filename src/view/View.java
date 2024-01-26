@@ -45,6 +45,7 @@ public class View extends JFrame {
      * initial screen.
      * 
      * @author HhT
+     * @author Lim KZ
      */
     public View() {
         super("Talabia"); // Title of the program
@@ -165,6 +166,7 @@ public class View extends JFrame {
      * 
      * @return the game screen panel
      * @author HhT
+     * @author Lim KZ
      */
     private JPanel createGameScreen() {
         gameScreen = new JPanel(); // Initialize the game screen
@@ -260,9 +262,17 @@ public class View extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (isGameScreen) { // If game screen is displayed
-                    if (askSaveGame()) { // If user choose to save game
+                    int option = askSaveGame(); // Ask the user if they want to save the game
+
+                    if (option == JOptionPane.YES_OPTION) { // If yes
                         saveGameAction.run(); // Perform save game action
+                        System.exit(0); // Exit the program
+                    } else if (option == JOptionPane.NO_OPTION) { // If no
+                        System.exit(0); // Exit the program without saving
                     }
+                    // If the user selects 'Cancel' or closes the dialog, do nothing (do not exit)
+                } else { // If game screen is not displayed
+                    System.exit(0); // Exit the program if the game screen is not displayed
                 }
                 System.exit(0); // Exit the program
             }
@@ -314,6 +324,7 @@ public class View extends JFrame {
      * 
      * @return true if game screen is displayed
      * @author HhT
+     * @author Lim KZ
      */
     public boolean isGameScreenDisplayed() {
         return isGameScreen;
@@ -367,6 +378,7 @@ public class View extends JFrame {
      * 
      * @return button's position as move object
      * @author HhT
+     * @author Lim KZ
      */
     public Move getButtonPosition(JButton button) {
         for (int r = 0; r < ROW; r++) {
@@ -386,6 +398,7 @@ public class View extends JFrame {
      * @param buttonToSet the button to set the image on
      * @param pieceName   the name of the piece, to get the image file
      * @author HhT
+     * @author Lim KZ
      */
     public void setPieceImage(JButton buttonToSet, String pieceName) {
         String imageName = (pieceName.replaceAll("\\d", "")) + ".png"; // Remove all digits from pieceName
@@ -413,6 +426,7 @@ public class View extends JFrame {
      * @param button    the button to set the image on
      * @param imageName the name of the image to be set
      * @author HhT
+     * @author Lim KZ
      */
     private void setImage(JButton button, String imageName) {
         URL imageUrl = getClass().getClassLoader().getResource(imageName); // Get image file with image name
@@ -433,6 +447,7 @@ public class View extends JFrame {
      * Clear all buttons' images before setting them again.
      * 
      * @author HhT
+     * @author Lim KZ
      */
     public void clearButtonsImages() {
         for (int r = 0; r < ROW; r++) {
@@ -446,6 +461,7 @@ public class View extends JFrame {
      * Set background color of a button.
      * 
      * @author HhT
+     * @author Lim KZ
      */
     public void setButtonBackgroundColor(JButton button, Color color) {
         button.setBackground(color);
@@ -455,6 +471,7 @@ public class View extends JFrame {
      * Highlight or hide buttons according to moves position.
      * 
      * @author HhT
+     * @author Lim KZ
      */
     public void setAvailableMovesColor(java.util.List<Move> availableMoves, Color color) {
         for (Move moves : availableMoves) {
@@ -526,18 +543,12 @@ public class View extends JFrame {
     /**
      * Display pop up to confirm whether to save game.
      * 
-     * @return true if Yes is choosen
-     * @return false if No is choosen
+     * @return the option choosen by the user, including cancel
      * @author HhT
      */
-    public boolean askSaveGame() {
-        int option = JOptionPane.showConfirmDialog(this, "Do you want to save the current game?", "Save Game",
+    public int askSaveGame() {
+        return JOptionPane.showConfirmDialog(this, "Do you want to save the current game?", "Save Game",
                 JOptionPane.YES_NO_OPTION);
-        if (option == JOptionPane.YES_OPTION) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**
@@ -545,7 +556,7 @@ public class View extends JFrame {
      * 
      * @author HhT
      */
-    public void askSaveGamePopup(String fileName, String directory) {
+    public void gameSavedPopup(String fileName, String directory) {
         JOptionPane.showMessageDialog(null, "\"" + fileName + "\" saved to '" + directory + "'");
     }
 
@@ -612,7 +623,7 @@ public class View extends JFrame {
      */
     public void showAbout() {
         JOptionPane.showMessageDialog(this,
-                "Talabia Chess, created by group Nauru\nTan Hong Han\nLim Kian Zee\nLam Zi Foong\nChai Di Sheng\nTan Yi Kai\nVersion 1.0");
+                "Talabia Chess, created by group Nauru\nTan Hong Han\nLim Kian Zee\nLam Zi Foong\nChai Di Sheng\nTan Yi Kai\nVersion 1.1");
     }
     /* -------------------------------------------------------------------------- */
 
@@ -620,6 +631,7 @@ public class View extends JFrame {
     /**
      * @return the board row constant
      * @author HhT
+     * @author Lim KZ
      */
     public static int getRowConstant() {
         return ROW;
@@ -628,6 +640,7 @@ public class View extends JFrame {
     /**
      * @return the board column constant
      * @author HhT
+     * @author Lim KZ
      */
     public static int getColumnConstant() {
         return COLUMN;

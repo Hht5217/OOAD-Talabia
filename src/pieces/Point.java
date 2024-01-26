@@ -19,6 +19,7 @@ public class Point extends Piece {
      * addition of moveDirection properties.
      * 
      * @author HhT
+     * @author Lim KZ
      */
     public Point(String id, int yPos, int xPos, PlayerColor color, String moveDirection, Board pieceBoard) {
         super(id, yPos, xPos, color, pieceBoard);

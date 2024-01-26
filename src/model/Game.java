@@ -9,8 +9,7 @@ package model;
 import controller.GameObserver;
 import pieces.*;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Game {
+    private Map<String, PieceFactory> factoryMap; // The map for which factory to use for pieces creation
     private List<GameObserver> observers = new ArrayList<>(); // The list of observers of game object
     private Board gameBoard; // The board that will be used to play
     private int moveCount = 0; // The move count made by players
@@ -32,94 +32,54 @@ public class Game {
      */
     public Game() {
         gameBoard = new Board(); // Initialize the game board
+
+        // Initialize the map for piece creation factory
+        factoryMap = new HashMap<>();
+        factoryMap.put("Point", new PointFactory());
+        factoryMap.put("Plus", new PlusFactory());
+        factoryMap.put("Time", new TimeFactory());
+        factoryMap.put("Hourglass", new HourglassFactory());
+        factoryMap.put("Sun", new SunFactory());
     }
 
     /* ------------------------------- Add pieces ------------------------------- */
     /**
-     * Group all the methods so they can be reused for starting new game. And since
-     * this is for initialization of new game, preset properties such as positions
-     * are used.
+     * Create pieces and add them to board. For initialization of new game, preset
+     * properties such as positions are used.
      * 
      * @author HhT
+     * @author Lim KZ
      */
     private void initPieces() {
         // Add Point pieces
         for (int i = 0; i < 7; i++) {
-            addPoint(Integer.toString(i + 1), 4, i, PlayerColor.YELLOW, "NORTH", gameBoard); // Yellow points
-            addPoint(Integer.toString(i + 1), 1, i, PlayerColor.BLUE, "SOUTH", gameBoard); // Blue points
+            gameBoard.addPiece(factoryMap.get("Point").createPiece(Integer.toString(i + 1), 4, i,
+                    PlayerColor.YELLOW, gameBoard, "NORTH"));
+            gameBoard.addPiece(factoryMap.get("Point").createPiece(Integer.toString(i + 1), 1, i, PlayerColor.BLUE,
+                    gameBoard, "SOUTH"));
         }
 
         // Add Plus pieces
-        addPlus("8", 5, 0, PlayerColor.YELLOW, gameBoard); // First yellow Plus
-        addPlus("9", 5, 6, PlayerColor.YELLOW, gameBoard); // Second yellow Plus
-        addPlus("8", 0, 0, PlayerColor.BLUE, gameBoard); // First blue Plus
-        addPlus("9", 0, 6, PlayerColor.BLUE, gameBoard); // Second blue Plus
+        gameBoard.addPiece(factoryMap.get("Plus").createPiece("8", 5, 0, PlayerColor.YELLOW, gameBoard, null));
+        gameBoard.addPiece(factoryMap.get("Plus").createPiece("9", 5, 6, PlayerColor.YELLOW, gameBoard, null));
+        gameBoard.addPiece(factoryMap.get("Plus").createPiece("8", 0, 0, PlayerColor.BLUE, gameBoard, null));
+        gameBoard.addPiece(factoryMap.get("Plus").createPiece("9", 0, 6, PlayerColor.BLUE, gameBoard, null));
 
         // Add Hourglass pieces
-        addHourglass("10", 5, 1, PlayerColor.YELLOW, gameBoard); // First yellow Hourglass
-        addHourglass("11", 5, 5, PlayerColor.YELLOW, gameBoard); // Second yellow Hourglass
-        addHourglass("10", 0, 1, PlayerColor.BLUE, gameBoard); // First blue Hourglass
-        addHourglass("11", 0, 5, PlayerColor.BLUE, gameBoard); // Second blue Hourglass
+        gameBoard.addPiece(factoryMap.get("Hourglass").createPiece("10", 5, 1, PlayerColor.YELLOW, gameBoard, null));
+        gameBoard.addPiece(factoryMap.get("Hourglass").createPiece("11", 5, 5, PlayerColor.YELLOW, gameBoard, null));
+        gameBoard.addPiece(factoryMap.get("Hourglass").createPiece("10", 0, 1, PlayerColor.BLUE, gameBoard, null));
+        gameBoard.addPiece(factoryMap.get("Hourglass").createPiece("11", 0, 5, PlayerColor.BLUE, gameBoard, null));
 
         // Add Time pieces
-        addTime("12", 5, 2, PlayerColor.YELLOW, gameBoard); // First yellow Time
-        addTime("13", 5, 4, PlayerColor.YELLOW, gameBoard); // Second yellow Time
-        addTime("12", 0, 2, PlayerColor.BLUE, gameBoard); // First blue Time
-        addTime("13", 0, 4, PlayerColor.BLUE, gameBoard); // Second blue Time
+        gameBoard.addPiece(factoryMap.get("Time").createPiece("12", 5, 2, PlayerColor.YELLOW, gameBoard, null));
+        gameBoard.addPiece(factoryMap.get("Time").createPiece("13", 5, 4, PlayerColor.YELLOW, gameBoard, null));
+        gameBoard.addPiece(factoryMap.get("Time").createPiece("12", 0, 2, PlayerColor.BLUE, gameBoard, null));
+        gameBoard.addPiece(factoryMap.get("Time").createPiece("13", 0, 4, PlayerColor.BLUE, gameBoard, null));
 
         // Add Sun pieces
-        addSun("14", 5, 3, PlayerColor.YELLOW, gameBoard); // Yellow Sun
-        addSun("14", 0, 3, PlayerColor.BLUE, gameBoard); // Blue Sun
-    }
-
-    /**
-     * Add Point pieces to the board.
-     * 
-     * @author HhT
-     * @author Lim KZ
-     */
-    private void addPoint(String id, int yPos, int xPos, PlayerColor color, String direction, Board gameBoard) {
-        gameBoard.addPiece(new Point(id, yPos, xPos, color, direction, gameBoard));
-    }
-
-    /**
-     * Add Plus pieces to the board.
-     * 
-     * @author HhT
-     * @author Lim KZ
-     */
-    private void addPlus(String id, int yPos, int xPos, PlayerColor color, Board gameBoard) {
-        gameBoard.addPiece(new Plus(id, yPos, xPos, color, gameBoard));
-    }
-
-    /**
-     * Add Hourglass pieces to the board.
-     * 
-     * @author HhT
-     * @author Lim KZ
-     */
-    private void addHourglass(String id, int yPos, int xPos, PlayerColor color, Board gameBoard) {
-        gameBoard.addPiece(new Hourglass(id, yPos, xPos, color, gameBoard));
-    }
-
-    /**
-     * Add Time pieces to the board.
-     * 
-     * @author HhT
-     * @author Lim KZ
-     */
-    private void addTime(String id, int yPos, int xPos, PlayerColor color, Board gameBoard) {
-        gameBoard.addPiece(new Time(id, yPos, xPos, color, gameBoard));
-    }
-
-    /**
-     * Add Sun pieces to the board.
-     * 
-     * @author HhT
-     * @author Lim KZ
-     */
-    private void addSun(String id, int yPos, int xPos, PlayerColor color, Board gameBoard) {
-        gameBoard.addPiece(new Sun(id, yPos, xPos, color, gameBoard));
+        gameBoard.addPiece(factoryMap.get("Sun").createPiece("14", 5, 3, PlayerColor.YELLOW, gameBoard, null));
+        gameBoard.addPiece(factoryMap.get("Sun").createPiece("14", 0, 3, PlayerColor.BLUE, gameBoard, null));
     }
     /* -------------------------------------------------------------------------- */
 
@@ -347,34 +307,28 @@ public class Game {
                     String key = parts[0]; // The type of information to be loaded
                     String value = parts[1]; // The value of the information
 
-                    switch (key) { // Parse the corresponding information to correct data type
-                        case "moveCount":
-                            moveCount = Integer.parseInt(value);
-                            break;
-                        case "currentPlayer":
-                            currentPlayer = PlayerColor.valueOf(value);
-                            break;
-                        case "isGameOver":
-                            isGameOver = Boolean.parseBoolean(value);
-                            break;
-                        case "piece": // Load different information of pieces
-                            String[] pieceParts = value.split(", "); // Split information at ","
-                            String type = pieceParts[0]; // The type of the piece
-                            String id = pieceParts[1]; // The unique id assigned to the piece
-                            int yPos = Integer.parseInt(pieceParts[2]); // Y position of the piece on the board
-                            int xPos = Integer.parseInt(pieceParts[3]); // X position of the piece on the board
-                            PlayerColor color = pieceParts[4].equals("YELLOW") ? PlayerColor.YELLOW : PlayerColor.BLUE;
-                            Piece pieceToLoad; // The piece to be loaded onto the board
-                            PieceFactory factory = new PieceFactory(); // Create pieces using piece factory
-                            if ("Point".equals(type)) { // Point piece needs to load direction
-                                String direction = pieceParts[5]; // The direction of the Point piece
-                                pieceToLoad = factory.createPiece(type, id, yPos, xPos, color, direction, gameBoard);
-                            } else {
-                                pieceToLoad = factory.createPiece(type, id, yPos, xPos, color, gameBoard);
-                            }
-                            gameBoard.addPiece(pieceToLoad);
-                            break;
+                    if ("moveCount".equals(key)) {
+                        moveCount = Integer.parseInt(value);
+                    } else if ("currentPlayer".equals(key)) {
+                        currentPlayer = PlayerColor.valueOf(value);
+                    } else if ("isGameOver".equals(key)) {
+                        isGameOver = Boolean.parseBoolean(value);
+                    } else if ("piece".equals(key)) {
+                        String[] pieceParts = value.split(", ");
+                        String type = pieceParts[0];
+                        String id = pieceParts[1];
+                        int yPos = Integer.parseInt(pieceParts[2]);
+                        int xPos = Integer.parseInt(pieceParts[3]);
+                        PlayerColor color = PlayerColor.valueOf(pieceParts[4]);
+                        String direction = (pieceParts.length > 5) ? pieceParts[5] : null;
 
+                        PieceFactory factory = factoryMap.get(type);
+                        if (factory != null) {
+                            Piece pieceToLoad = factory.createPiece(id, yPos, xPos, color, gameBoard, direction);
+                            gameBoard.addPiece(pieceToLoad);
+                        } else {
+                            throw new IllegalArgumentException("No factory found for piece type: " + type);
+                        }
                     }
                 }
             }
