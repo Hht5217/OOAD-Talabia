@@ -2,7 +2,7 @@
  * The Sun class extends the Piece class and represents the Sun
  * piece in the game.
  */
-package src.pieces;
+package pieces;
 
 import java.util.List;
 import model.*;
@@ -11,7 +11,7 @@ public class Sun extends Piece {
     /**
      * Constructor of Sun piece. Values are inherited from Piece class.
      * 
-     * @author HhT 
+     * @author HhT
      */
     public Sun(String id, int yPos, int xPos, PlayerColor color, Board pieceBoard) {
         super(id, yPos, xPos, color, pieceBoard);

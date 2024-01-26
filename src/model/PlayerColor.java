@@ -4,7 +4,7 @@
  * between the two players in the game and to assign colors to them.
  * @author HhT
  */
-package src.model;
+package model;
 
 // Originally named Color, changed to PlayerColor to differentiate from java util Color
 public enum PlayerColor {

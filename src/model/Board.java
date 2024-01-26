@@ -6,7 +6,7 @@
  * for accessing information about the game board, such as getting a piece at a
  * specific location and getting the dimensions of the board.
  */
-package src.model;
+package model;
 
 import controller.GameObserver;
 import pieces.*;

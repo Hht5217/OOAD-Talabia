@@ -1,7 +1,7 @@
 /**
  * Observer pattern. This is the interface for observers.
  */
-package src.controller;
+package controller;
 
 public interface GameObserver {
     // What to do when game is over

@@ -3,7 +3,7 @@
  * game. It extends the JFrame class and contains methods for creating the menu
  * screen, game screen, and essential GUI components.
  */
-package src.view;
+package view;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -45,6 +45,7 @@ public class View extends JFrame {
      * initial screen.
      * 
      * @author HhT
+     * @author Lim KZ
      */
     public View() {
         super("Talabia"); // Title of the program
@@ -165,6 +166,7 @@ public class View extends JFrame {
      * 
      * @return the game screen panel
      * @author HhT
+     * @author Lim KZ
      */
     private JPanel createGameScreen() {
         gameScreen = new JPanel(); // Initialize the game screen
@@ -322,6 +324,7 @@ public class View extends JFrame {
      * 
      * @return true if game screen is displayed
      * @author HhT
+     * @author Lim KZ
      */
     public boolean isGameScreenDisplayed() {
         return isGameScreen;
@@ -375,6 +378,7 @@ public class View extends JFrame {
      * 
      * @return button's position as move object
      * @author HhT
+     * @author Lim KZ
      */
     public Move getButtonPosition(JButton button) {
         for (int r = 0; r < ROW; r++) {
@@ -394,6 +398,7 @@ public class View extends JFrame {
      * @param buttonToSet the button to set the image on
      * @param pieceName   the name of the piece, to get the image file
      * @author HhT
+     * @author Lim KZ
      */
     public void setPieceImage(JButton buttonToSet, String pieceName) {
         String imageName = (pieceName.replaceAll("\\d", "")) + ".png"; // Remove all digits from pieceName
@@ -421,6 +426,7 @@ public class View extends JFrame {
      * @param button    the button to set the image on
      * @param imageName the name of the image to be set
      * @author HhT
+     * @author Lim KZ
      */
     private void setImage(JButton button, String imageName) {
         URL imageUrl = getClass().getClassLoader().getResource(imageName); // Get image file with image name
@@ -441,6 +447,7 @@ public class View extends JFrame {
      * Clear all buttons' images before setting them again.
      * 
      * @author HhT
+     * @author Lim KZ
      */
     public void clearButtonsImages() {
         for (int r = 0; r < ROW; r++) {
@@ -454,6 +461,7 @@ public class View extends JFrame {
      * Set background color of a button.
      * 
      * @author HhT
+     * @author Lim KZ
      */
     public void setButtonBackgroundColor(JButton button, Color color) {
         button.setBackground(color);
@@ -463,6 +471,7 @@ public class View extends JFrame {
      * Highlight or hide buttons according to moves position.
      * 
      * @author HhT
+     * @author Lim KZ
      */
     public void setAvailableMovesColor(java.util.List<Move> availableMoves, Color color) {
         for (Move moves : availableMoves) {
@@ -622,6 +631,7 @@ public class View extends JFrame {
     /**
      * @return the board row constant
      * @author HhT
+     * @author Lim KZ
      */
     public static int getRowConstant() {
         return ROW;
@@ -630,6 +640,7 @@ public class View extends JFrame {
     /**
      * @return the board column constant
      * @author HhT
+     * @author Lim KZ
      */
     public static int getColumnConstant() {
         return COLUMN;

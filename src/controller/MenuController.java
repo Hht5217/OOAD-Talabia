@@ -5,7 +5,7 @@
  * a game, switching to the main menu, and exiting the game, and then performs
  * the appropriate operations in response.
  */
-package src.controller;
+package controller;
 
 import java.io.File;
 import java.io.IOException;
