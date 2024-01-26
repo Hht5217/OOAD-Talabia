@@ -36,6 +36,7 @@ public class Move {
     /**
      * @return the column
      * @author HhT
+     * @author Lim KZ
      */
     public int getMoveColumn() {
         return column;
