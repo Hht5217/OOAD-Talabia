@@ -564,6 +564,7 @@ public class View extends JFrame {
      * Display window that shows how to play the game.
      * 
      * @author HhT
+     * @author Lam ZF
      */
     public void showGuide() {
         // Create a dialog (a pop up window)
