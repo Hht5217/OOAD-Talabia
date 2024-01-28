@@ -278,6 +278,7 @@ public class Game {
      * Set the state of game to initial values.
      * 
      * @author HhT
+     * @author Lam ZF
      */
     public void setNewGame() {
         currentPlayer = PlayerColor.YELLOW;
