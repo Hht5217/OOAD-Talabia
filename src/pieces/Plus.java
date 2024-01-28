@@ -24,6 +24,7 @@ public class Plus extends Piece {
      * 
      * @return the list of available moves
      * @author HhT
+     * @author Lam ZF
      */
     @Override
     public List<Move> getAvailableMoves() {

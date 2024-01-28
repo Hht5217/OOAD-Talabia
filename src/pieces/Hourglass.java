@@ -24,6 +24,7 @@ public class Hourglass extends Piece {
      * @author HhT
      * @author Chai DS
      * @author Lim KZ
+     * @author Lam ZF
      */
     @Override
     public List<Move> getAvailableMoves() {
