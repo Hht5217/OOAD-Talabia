@@ -30,9 +30,9 @@ public class MenuController {
         this.view = talabiaView;
     }
 
-    /* ------------------------------ Initalization ----------------------------- */
+    /* ----------------------------- Initialization ----------------------------- */
     /**
-     * Initalization of components.
+     * Initialization of components.
      * 
      * @author HhT
      * @author yikai
