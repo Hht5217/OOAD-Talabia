@@ -35,6 +35,7 @@ public class MenuController {
      * Initalization of components.
      * 
      * @author HhT
+     * @author yikai
      */
     public void initController() {
         // Set the action of window close button when the game screen is being displayed
@@ -137,6 +138,7 @@ public class MenuController {
      * Action performed when load game button or load game menu item is clicked.
      * 
      * @author HhT
+     * @author yikai
      */
     private void loadGame() {
         // Same function, refer to newGame()
@@ -182,6 +184,7 @@ public class MenuController {
      * Yes when asked to save the game before setting new game or loading game.
      * 
      * @author HhT
+     * @author yikai
      */
     private void saveGame() {
         File saveDir = new File("saves"); // The directory to save the game file
